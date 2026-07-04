@@ -42,7 +42,7 @@ def seed_data():
             db.session.add(
                 Sala(
                     nome=nome,
-                    localizacao="Biblioteca Central",
+                    localizacao="CCT",
                     capacidade=capacidade,
                     descricao="Sala equipada para estudos em grupo.",
                     ativa=True,
@@ -50,7 +50,9 @@ def seed_data():
                 )
             )
 
-    if not ConfiguracaoSistema.query.filter_by(chave="max_reservas_ativas_aluno").first():
+    if not ConfiguracaoSistema.query.filter_by(
+        chave="max_reservas_ativas_aluno"
+    ).first():
         db.session.add(
             ConfiguracaoSistema(
                 chave="max_reservas_ativas_aluno",

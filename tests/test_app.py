@@ -39,7 +39,9 @@ def test_login_invalido(client):
 
 def test_criacao_reserva_valida(client, app):
     login(client)
-    response = client.post("/salas/horarios", data=reserva_payload(), follow_redirects=True)
+    response = client.post(
+        "/salas/horarios", data=reserva_payload(), follow_redirects=True
+    )
     assert response.status_code == 200
     assert "Reserva criada com sucesso".encode() in response.data
     with app.app_context():
@@ -90,27 +92,36 @@ def test_rejeita_reserva_data_passada(client, app):
 
 def test_rejeita_hora_final_anterior_ao_inicio(client, app):
     login(client)
-    client.post("/salas/horarios", data=reserva_payload(hora_inicio="10:00", hora_fim="09:00"))
+    client.post(
+        "/salas/horarios", data=reserva_payload(hora_inicio="10:00", hora_fim="09:00")
+    )
     with app.app_context():
         assert Reserva.query.count() == 0
 
 
 def test_rejeita_reserva_com_mais_de_duas_horas(client, app):
     login(client)
-    client.post("/salas/horarios", data=reserva_payload(hora_inicio="09:00", hora_fim="11:30"))
+    client.post(
+        "/salas/horarios", data=reserva_payload(hora_inicio="09:00", hora_fim="11:30")
+    )
     with app.app_context():
         assert Reserva.query.count() == 0
 
 
 def test_rejeita_conflito_de_horarios(client, app):
     login(client)
-    client.post("/salas/horarios", data=reserva_payload(hora_inicio="09:00", hora_fim="10:00"))
+    client.post(
+        "/salas/horarios", data=reserva_payload(hora_inicio="09:00", hora_fim="10:00")
+    )
     response = client.post(
         "/salas/horarios",
         data=reserva_payload(hora_inicio="09:30", hora_fim="10:30"),
         follow_redirects=True,
     )
-    assert "Sala de Estudos 01 já está reservada das 09:00 às 10:00".encode() in response.data
+    assert (
+        "Sala de Estudos 01 já está reservada das 09:00 às 10:00".encode()
+        in response.data
+    )
     with app.app_context():
         assert Reserva.query.count() == 1
 
@@ -194,7 +205,9 @@ def test_horario_reservado_mostra_finalidade(client):
             finalidade="Revisão de cálculo",
         ),
     )
-    response = client.get(f"/salas/horarios?sala_id=1&data={amanha.strftime('%Y-%m-%d')}")
+    response = client.get(
+        f"/salas/horarios?sala_id=1&data={amanha.strftime('%Y-%m-%d')}"
+    )
     assert response.status_code == 200
     assert "Revisão de cálculo".encode() in response.data
 
@@ -377,7 +390,7 @@ def test_admin_edita_e_bloqueia_sala(client, app):
         "/admin/salas/1/editar",
         data={
             "nome": "Sala de Estudos 01",
-            "localizacao": "Biblioteca Central",
+            "localizacao": "CCT",
             "capacidade": "4",
             "descricao": "Em manutenção.",
             "ativa": "on",
@@ -454,7 +467,9 @@ def test_admin_cancela_bloqueio(client, app):
     )
     with app.app_context():
         bloqueio_id = BloqueioSala.query.first().id
-    response = client.post(f"/admin/bloqueios/{bloqueio_id}/cancelar", follow_redirects=True)
+    response = client.post(
+        f"/admin/bloqueios/{bloqueio_id}/cancelar", follow_redirects=True
+    )
     assert response.status_code == 200
     with app.app_context():
         assert BloqueioSala.query.first().ativo is False
@@ -485,15 +500,30 @@ def test_limite_de_reservas_ativas_por_aluno(client, app):
     amanha = date.today() + timedelta(days=1)
     client.post(
         "/salas/horarios",
-        data=reserva_payload(data=amanha.strftime("%Y-%m-%d"), sala_id="1", hora_inicio="08:00", hora_fim="09:00"),
+        data=reserva_payload(
+            data=amanha.strftime("%Y-%m-%d"),
+            sala_id="1",
+            hora_inicio="08:00",
+            hora_fim="09:00",
+        ),
     )
     client.post(
         "/salas/horarios",
-        data=reserva_payload(data=amanha.strftime("%Y-%m-%d"), sala_id="2", hora_inicio="09:00", hora_fim="10:00"),
+        data=reserva_payload(
+            data=amanha.strftime("%Y-%m-%d"),
+            sala_id="2",
+            hora_inicio="09:00",
+            hora_fim="10:00",
+        ),
     )
     response = client.post(
         "/salas/horarios",
-        data=reserva_payload(data=amanha.strftime("%Y-%m-%d"), sala_id="3", hora_inicio="10:00", hora_fim="11:00"),
+        data=reserva_payload(
+            data=amanha.strftime("%Y-%m-%d"),
+            sala_id="3",
+            hora_inicio="10:00",
+            hora_fim="11:00",
+        ),
         follow_redirects=True,
     )
 
