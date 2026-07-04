@@ -1,0 +1,30 @@
+  E “fazer uma validação final” significa:
+ 
+ 
+  1. Rodar os testes:
+ 
+ 
+     pytest
+ 
+ 
+  2. Rodar o banco:
+ 
+ 
+     sudo systemctl start postgresql
+     python init_db.py
+ 
+ 
+  3. Iniciar o sistema:
+ 
+ 
+     python run.py
+ 
+ 
+  4. Testar no navegador:
+      - login admin;
+      - cadastro de usuário;
+      - cadastro/edição de sala;
+      - bloqueio de sala;
+      - login aluno;
+      - reserva;
+      - cancelamento.

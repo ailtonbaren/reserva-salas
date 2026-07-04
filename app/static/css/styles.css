@@ -1,0 +1,109 @@
+body {
+    background: #f4f6f8;
+    color: #1f2933;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.page-shell {
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
+}
+
+.status-pill {
+    min-width: 82px;
+}
+
+.app-navbar {
+    background: #12355b;
+    border-bottom: 4px solid #d7a21b;
+}
+
+.page-title {
+    font-weight: 700;
+    color: #12355b;
+}
+
+.page-subtitle {
+    max-width: 760px;
+}
+
+.card {
+    border: 1px solid #d9e0e7;
+    border-radius: 8px;
+}
+
+.card-header {
+    border-bottom-color: #e3e8ee;
+}
+
+.metric-card {
+    border-left: 4px solid #1f6fb2;
+}
+
+.metric-label {
+    color: #637083;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.metric-value {
+    color: #12355b;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.table thead th {
+    background: #eef3f7;
+    color: #354052;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+.empty-state {
+    padding: 2.5rem 1rem;
+    text-align: center;
+}
+
+.empty-state-title {
+    color: #12355b;
+    font-weight: 700;
+}
+
+.form-section-title {
+    color: #12355b;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.login-shell {
+    min-height: calc(100vh - 4rem);
+    display: flex;
+    align-items: center;
+}
+
+.login-heading {
+    color: #12355b;
+    font-weight: 700;
+}
+
+.btn-primary {
+    background-color: #1f6fb2;
+    border-color: #1f6fb2;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #18598f;
+    border-color: #18598f;
+}
+
+.nav-link.active {
+    font-weight: 700;
+}

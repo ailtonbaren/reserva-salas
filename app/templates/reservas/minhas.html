@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}Minhas Reservas - Reserva de Salas{% endblock %}
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="h3 page-title mb-1">Minhas reservas</h1>
+        <p class="text-muted mb-0">Consulte e cancele suas reservas quando necessário.</p>
+    </div>
+    <a class="btn btn-primary" href="{{ url_for('salas.horarios') }}">Ver horários</a>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label" for="status">Filtrar reservas</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="todas" {% if filtro == 'todas' %}selected{% endif %}>Todas</option>
+                    <option value="ativas" {% if filtro == 'ativas' %}selected{% endif %}>Ativas</option>
+                    <option value="canceladas" {% if filtro == 'canceladas' %}selected{% endif %}>Canceladas</option>
+                    <option value="passadas" {% if filtro == 'passadas' %}selected{% endif %}>Passadas</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button class="btn btn-primary" type="submit">Aplicar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+            <tr>
+                <th>Sala</th>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Status</th>
+                <th>Motivo do cancelamento</th>
+                <th class="text-end">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for reserva in reservas %}
+            <tr>
+                <td>{{ reserva.sala.nome }}</td>
+                <td>{{ reserva.data.strftime("%d/%m/%Y") }}</td>
+                <td>{{ reserva.hora_inicio.strftime("%H:%M") }} - {{ reserva.hora_fim.strftime("%H:%M") }}</td>
+                <td>
+                    <span class="badge {% if reserva.ativa %}text-bg-success{% else %}text-bg-secondary{% endif %}">
+                        {{ reserva.status|capitalize }}
+                    </span>
+                </td>
+                <td>
+                    {% if reserva.motivo_cancelamento %}
+                    {{ reserva.motivo_cancelamento }}
+                    {% else %}
+                    <span class="text-muted">-</span>
+                    {% endif %}
+                </td>
+                <td class="text-end">
+                    {% if reserva.ativa %}
+                    <button
+                        class="btn btn-sm btn-outline-danger"
+                        type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#cancelar-reserva-{{ reserva.id }}"
+                    >
+                        Cancelar
+                    </button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">
+                    <div class="empty-state">
+                        <div class="empty-state-title mb-1">Você ainda não possui reservas</div>
+                        <p class="text-muted mb-3">Reserve uma sala de estudo disponível para começar.</p>
+                        <a class="btn btn-sm btn-primary" href="{{ url_for('salas.horarios') }}">Ver horários disponíveis</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% for reserva in reservas %}
+    {% if reserva.ativa %}
+    <div class="modal fade" id="cancelar-reserva-{{ reserva.id }}" tabindex="-1" aria-labelledby="cancelar-reserva-label-{{ reserva.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="{{ url_for('reservas.cancelar', reserva_id=reserva.id) }}">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="cancelar-reserva-label-{{ reserva.id }}">
+                            Cancelar reserva
+                        </h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-2">
+                            {{ reserva.sala.nome }} · {{ reserva.data.strftime("%d/%m/%Y") }} ·
+                            {{ reserva.hora_inicio.strftime("%H:%M") }} - {{ reserva.hora_fim.strftime("%H:%M") }}
+                        </p>
+                        <label class="form-label" for="motivo-cancelamento-{{ reserva.id }}">
+                            Motivo do cancelamento
+                        </label>
+                        <textarea
+                            class="form-control"
+                            id="motivo-cancelamento-{{ reserva.id }}"
+                            name="motivo_cancelamento"
+                            rows="3"
+                            maxlength="255"
+                            required
+                        ></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            Voltar
+                        </button>
+                        <button type="submit" class="btn btn-danger">
+                            Confirmar cancelamento
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endfor %}
+{% endblock %}

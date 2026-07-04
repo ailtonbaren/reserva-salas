@@ -1,0 +1,120 @@
+VALIDACAO FINAL - RESERVA DE SALAS DE ESTUDO
+
+Responsavel tecnico: Ailton Baren Pereira da Silva
+Data: 30/06/2026
+
+1. Testes automatizados
+
+Status: APROVADO
+
+Comando executado:
+
+    .venv/bin/pytest
+
+Resultado:
+
+    33 passed
+
+Observacao:
+Os testes automatizados validaram login, permissao administrativa, cadastro e edicao de usuarios, reservas, conflitos, cancelamentos, salas, bloqueios, configuracoes e renderizacao das principais telas.
+
+
+2. Banco de dados PostgreSQL
+
+Status: PENDENTE NO AMBIENTE ATUAL
+
+Estado atual verificado:
+
+    systemctl is-active postgresql
+
+Resultado:
+
+    inactive
+
+Tentativa realizada:
+
+    systemctl start postgresql
+
+Resultado:
+O comando foi bloqueado pelo systemd porque exige autenticacao interativa.
+
+Mensagem retornada:
+
+    Failed to start postgresql.service: Access denied as the requested operation requires interactive authentication.
+
+Comandos para executar no terminal local:
+
+    sudo systemctl start postgresql
+    systemctl is-active postgresql
+    python init_db.py
+
+Resultado esperado:
+
+    active
+    Banco de dados atualizado/criado com dados iniciais.
+
+
+3. Inicializacao da aplicacao
+
+Status: PENDENTE ATE O POSTGRESQL SER INICIADO
+
+Motivo:
+A aplicacao usa PostgreSQL como banco principal. Como o servico esta inactive, a inicializacao para teste no navegador deve ser feita depois de iniciar o banco.
+
+Comandos para executar:
+
+    source .venv/bin/activate
+    python run.py
+
+Resultado esperado:
+
+    Aplicacao disponivel em http://127.0.0.1:5000
+
+
+4. Validacao manual no navegador
+
+Status: PENDENTE ATE A APLICACAO SER INICIADA
+
+Checklist recomendado:
+
+    [ ] Login como administrador: admin@uema.com / admin123
+    [ ] Cadastrar novo usuario aluno pelo painel admin
+    [ ] Editar usuario cadastrado
+    [ ] Cadastrar ou editar uma sala
+    [ ] Bloquear uma sala por periodo
+    [ ] Configurar limite de reservas ativas por aluno
+    [ ] Sair do admin
+    [ ] Entrar como aluno
+    [ ] Consultar horarios
+    [ ] Criar reserva valida
+    [ ] Cancelar reserva informando motivo
+
+
+Artefatos formais gerados em LaTeX/PDF
+
+Diretorio:
+
+    docs/latex/artefatos
+
+Arquivos gerados:
+
+    arquitetura_do_sistema.tex
+    arquitetura_do_sistema.pdf
+    documento_de_requisitos.tex
+    documento_de_requisitos.pdf
+    gerenciamento_de_riscos.tex
+    gerenciamento_de_riscos.pdf
+    manual_do_usuario.tex
+    manual_do_usuario.pdf
+    matriz_de_rastreabilidade.tex
+    matriz_de_rastreabilidade.pdf
+    plano_de_testes.tex
+    plano_de_testes.pdf
+    termo_de_homologacao.tex
+    termo_de_homologacao.pdf
+
+
+Resumo
+
+O sistema passou nos testes automatizados e os artefatos formais foram gerados em LaTeX/PDF.
+A validacao do banco, da aplicacao em execucao e do navegador depende apenas de iniciar o PostgreSQL no terminal local com sudo.

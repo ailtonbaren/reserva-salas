@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Bloqueios - Reserva de Salas{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <h1 class="h3 page-title mb-1">Bloqueios por período</h1>
+    <p class="text-muted mb-0">Bloqueie uma sala por um intervalo de dias para manutenção ou indisponibilidade temporária.</p>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white">
+        <span class="form-section-title">Novo bloqueio</span>
+    </div>
+    <div class="card-body">
+        <form method="post" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label" for="sala_id">Sala</label>
+                <select class="form-select" id="sala_id" name="sala_id" required>
+                    <option value="">Selecione</option>
+                    {% for sala in salas %}
+                    <option value="{{ sala.id }}">{{ sala.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" for="data_inicio">Data de início</label>
+                <input class="form-control" id="data_inicio" name="data_inicio" type="date" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" for="data_fim">Data de término</label>
+                <input class="form-control" id="data_fim" name="data_fim" type="date" required>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label" for="motivo">Motivo</label>
+                <input class="form-control" id="motivo" name="motivo" placeholder="Manutenção">
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Criar bloqueio</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white">
+        <strong>Bloqueios cadastrados</strong>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+            <tr>
+                <th>Sala</th>
+                <th>Início</th>
+                <th>Término</th>
+                <th>Motivo</th>
+                <th>Status</th>
+                <th class="text-end">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for bloqueio in bloqueios %}
+            <tr>
+                <td>{{ bloqueio.sala.nome }}</td>
+                <td>{{ bloqueio.data.strftime("%d/%m/%Y") }}</td>
+                <td>{{ (bloqueio.data_fim or bloqueio.data).strftime("%d/%m/%Y") }}</td>
+                <td>{{ bloqueio.motivo }}</td>
+                <td>
+                    {% if bloqueio.ativo %}
+                    <span class="badge text-bg-warning">Ativo</span>
+                    {% else %}
+                    <span class="badge text-bg-secondary">Cancelado</span>
+                    {% endif %}
+                </td>
+                <td class="text-end">
+                    {% if bloqueio.ativo %}
+                    <form method="post" action="{{ url_for('admin.cancelar_bloqueio', bloqueio_id=bloqueio.id) }}" class="d-inline">
+                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('Confirma o cancelamento deste bloqueio?')">Cancelar</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">
+                    <div class="empty-state">
+                        <div class="empty-state-title mb-1">Nenhum bloqueio cadastrado</div>
+                        <p class="text-muted mb-0">Bloqueios temporários aparecerão nesta lista.</p>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

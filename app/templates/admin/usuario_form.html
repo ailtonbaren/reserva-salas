@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Usuário - Reserva de Salas{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="mb-4">
+            <h1 class="h3 page-title mb-1">{% if usuario.id %}Editar usuário{% else %}Novo usuário{% endif %}</h1>
+            <p class="text-muted mb-0">Mantenha os dados de acesso dos usuários atualizados.</p>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <span class="form-section-title">Dados do usuário</span>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label" for="nome">Nome</label>
+                        <input class="form-control" id="nome" name="nome" value="{{ usuario.nome or '' }}" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label" for="email">E-mail</label>
+                            <input class="form-control" id="email" name="email" type="email" value="{{ usuario.email or '' }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="matricula">Matrícula</label>
+                            <input class="form-control" id="matricula" name="matricula" value="{{ usuario.matricula or '' }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="perfil">Perfil</label>
+                            <select class="form-select" id="perfil" name="perfil" required>
+                                <option value="aluno" {% if usuario.perfil == "aluno" %}selected{% endif %}>Aluno</option>
+                                <option value="administrador" {% if usuario.perfil == "administrador" %}selected{% endif %}>Administrador</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="senha">
+                                Senha{% if usuario.id %} nova{% endif %}
+                            </label>
+                            <input
+                                class="form-control"
+                                id="senha"
+                                name="senha"
+                                type="password"
+                                minlength="6"
+                                {% if not usuario.id %}required{% endif %}
+                                aria-describedby="senha-ajuda"
+                            >
+                            <div class="form-text" id="senha-ajuda">
+                                {% if usuario.id %}Deixe em branco para manter a senha atual.{% else %}Mínimo de 6 caracteres.{% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border rounded p-3 mb-4 bg-light">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="ativo" name="ativo" {% if usuario.ativo or not usuario.id %}checked{% endif %}>
+                            <label class="form-check-label" for="ativo">Usuário ativo</label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        <button class="btn btn-primary" type="submit">Salvar</button>
+                        <a class="btn btn-outline-secondary" href="{{ url_for('admin.usuarios') }}">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

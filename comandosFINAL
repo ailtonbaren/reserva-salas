@@ -1,0 +1,108 @@
+COMANDOS FINAIS - RESERVA DE SALAS DE ESTUDO
+
+Execute estes comandos a partir da raiz do projeto:
+
+    /home/dynnob/apsProjeto/reserva-salas
+
+
+1. Entrar na pasta do projeto
+
+    cd /home/dynnob/apsProjeto/reserva-salas
+
+
+2. Iniciar o PostgreSQL
+
+    sudo systemctl start postgresql
+
+
+3. Verificar se o PostgreSQL iniciou
+
+    systemctl is-active postgresql
+
+Resultado esperado:
+
+    active
+
+
+4. Ativar o ambiente virtual
+
+    source .venv/bin/activate
+
+
+5. Instalar ou atualizar dependencias
+
+    pip install -r requirements.txt
+
+
+6. Criar ou atualizar o banco e os dados iniciais
+
+    python init_db.py
+
+Resultado esperado:
+
+    Banco de dados atualizado/criado com dados iniciais.
+
+
+7. Executar os testes automatizados
+
+    pytest
+
+Resultado esperado:
+
+    33 passed
+
+
+8. Iniciar a aplicacao
+
+    python run.py
+
+
+9. Abrir no navegador
+
+    http://127.0.0.1:5000
+
+
+10. Acessos iniciais
+
+Administrador:
+
+    email: admin@uema.com
+    senha: admin123
+
+Aluno:
+
+    email: aluno@uema.com
+    senha: aluno123
+
+
+11. Parar a aplicacao Flask
+
+No terminal onde o comando python run.py estiver rodando, pressione:
+
+    Ctrl + C
+
+
+12. Parar o PostgreSQL, se quiser desligar tudo
+
+    sudo systemctl stop postgresql
+
+
+13. Verificar se o PostgreSQL parou
+
+    systemctl is-active postgresql
+
+Resultado esperado:
+
+    inactive
+
+
+Observacao sobre DATABASE_URL
+
+Por padrao, o sistema usa:
+
+    postgresql+psycopg://reserva_salas:reserva_salas@localhost:5432/reserva_salas
+
+Se o usuario, senha ou banco forem diferentes, configure antes de rodar init_db.py ou run.py:
+
+    export DATABASE_URL="postgresql+psycopg://usuario:senha@localhost:5432/reserva_salas"
+

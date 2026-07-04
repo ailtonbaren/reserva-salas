@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Página não encontrada - Reserva de Salas{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-5">404</h1>
+    <p class="lead">A página solicitada não foi encontrada.</p>
+    <a class="btn btn-primary" href="{{ url_for('main.dashboard') if current_user.is_authenticated else url_for('auth.login') }}">Voltar</a>
+</div>
+{% endblock %}
