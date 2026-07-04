@@ -11,7 +11,7 @@ Sistema web acadêmico para reserva de salas de estudo, com autenticação, perf
 - PostgreSQL
 - psycopg
 - Jinja2
-- Bootstrap 5 por CDN
+- Bootstrap 5
 - pytest
 
 ## Instalação
