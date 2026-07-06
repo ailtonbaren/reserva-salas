@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, time, timedelta
 
 from app.extensions import db
 from app.models import BloqueioSala, ConfiguracaoSistema, Reserva, Sala, Usuario
@@ -218,6 +218,35 @@ def test_filtro_de_salas_por_capacidade(client):
     assert response.status_code == 200
     assert "Sala de Estudos 03".encode() in response.data
     assert "Sala de Estudos 01".encode() not in response.data
+
+
+def test_lista_salas_mostra_bloqueio_do_dia_atual(client, app):
+    with app.app_context():
+        db.session.add(
+            BloqueioSala(
+                sala_id=1,
+                data=date.today(),
+                data_fim=date.today(),
+                hora_inicio=time(hour=0),
+                hora_fim=time(hour=23, minute=59),
+                motivo="Manutenção",
+                ativo=True,
+            )
+        )
+        db.session.commit()
+
+    login(client)
+    response = client.get("/salas/")
+    assert response.status_code == 200
+    assert "Bloqueada hoje".encode() in response.data
+
+    response = client.get("/salas/?status=disponivel")
+    assert response.status_code == 200
+    assert "Sala de Estudos 01".encode() not in response.data
+
+    response = client.get("/salas/?status=bloqueada")
+    assert response.status_code == 200
+    assert "Sala de Estudos 01".encode() in response.data
 
 
 def test_templates_principais_do_aluno_renderizam(client):

@@ -5,7 +5,13 @@ from flask_login import current_user, login_required
 
 from app.extensions import db
 from app.models import Sala
-from app.services import RegraReservaErro, criar_reserva, gerar_horarios_disponiveis, parse_date
+from app.services import (
+    RegraReservaErro,
+    criar_reserva,
+    gerar_horarios_disponiveis,
+    obter_ids_salas_bloqueadas_na_data,
+    parse_date,
+)
 
 salas_bp = Blueprint("salas", __name__, url_prefix="/salas")
 
@@ -26,15 +32,31 @@ def listar():
     if capacidade.isdigit():
         query = query.filter(Sala.capacidade >= int(capacidade))
 
+    hoje = date.today()
+    ids_bloqueadas_hoje = obter_ids_salas_bloqueadas_na_data(hoje)
+
     if status == "disponivel":
         query = query.filter_by(ativa=True, bloqueada=False)
     elif status == "bloqueada":
-        query = query.filter_by(bloqueada=True)
+        query = query.filter(Sala.ativa.is_(True))
     elif status == "inativa":
         query = query.filter_by(ativa=False)
 
     salas = query.order_by(Sala.nome).all()
-    return render_template("salas/lista.html", salas=salas)
+    if status == "disponivel":
+        salas = [sala for sala in salas if sala.id not in ids_bloqueadas_hoje]
+    elif status == "bloqueada":
+        salas = [
+            sala
+            for sala in salas
+            if sala.bloqueada or sala.id in ids_bloqueadas_hoje
+        ]
+
+    return render_template(
+        "salas/lista.html",
+        salas=salas,
+        ids_bloqueadas_hoje=ids_bloqueadas_hoje,
+    )
 
 
 @salas_bp.route("/horarios", methods=["GET", "POST"])

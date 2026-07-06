@@ -37,6 +37,15 @@ def obter_limite_reservas_ativas_aluno():
     return obter_configuracao_int("max_reservas_ativas_aluno", 3)
 
 
+def obter_ids_salas_bloqueadas_na_data(data):
+    bloqueios = BloqueioSala.query.filter(
+        BloqueioSala.ativo.is_(True),
+        BloqueioSala.data <= data,
+        or_(BloqueioSala.data_fim.is_(None), BloqueioSala.data_fim >= data),
+    ).all()
+    return {bloqueio.sala_id for bloqueio in bloqueios}
+
+
 def parse_date(value):
     value = (value or "").strip()
     for formato in ("%d/%m/%Y", "%Y-%m-%d"):

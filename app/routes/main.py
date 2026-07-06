@@ -4,6 +4,7 @@ from flask import Blueprint, redirect, render_template, url_for
 from flask_login import current_user, login_required
 
 from app.models import Reserva, Sala
+from app.services import obter_ids_salas_bloqueadas_na_data
 
 main_bp = Blueprint("main", __name__)
 
@@ -18,14 +19,21 @@ def index():
 @main_bp.route("/dashboard")
 @login_required
 def dashboard():
+    hoje = date.today()
+    ids_bloqueadas_hoje = obter_ids_salas_bloqueadas_na_data(hoje)
+    salas_disponiveis = (
+        Sala.query.filter_by(ativa=True, bloqueada=False)
+        .filter(~Sala.id.in_(ids_bloqueadas_hoje))
+        .count()
+    )
+
     if current_user.is_admin:
         reservas_ativas = Reserva.query.filter_by(status="ativa").count()
-        salas_disponiveis = Sala.query.filter_by(ativa=True, bloqueada=False).count()
         return render_template(
             "dashboard.html",
             reservas_ativas=reservas_ativas,
             proximas_reservas=Reserva.query.filter(
-                Reserva.status == "ativa", Reserva.data >= date.today()
+                Reserva.status == "ativa", Reserva.data >= hoje
             )
             .order_by(Reserva.data, Reserva.hora_inicio)
             .limit(5)
@@ -38,13 +46,12 @@ def dashboard():
         Reserva.query.filter(
             Reserva.usuario_id == current_user.id,
             Reserva.status == "ativa",
-            Reserva.data >= date.today(),
+            Reserva.data >= hoje,
         )
         .order_by(Reserva.data, Reserva.hora_inicio)
         .limit(5)
         .all()
     )
-    salas_disponiveis = Sala.query.filter_by(ativa=True, bloqueada=False).count()
     return render_template(
         "dashboard.html",
         reservas_ativas=reservas_ativas,
