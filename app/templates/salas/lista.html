@@ -39,13 +39,13 @@
                 <div class="d-flex justify-content-between gap-2">
                     <h2 class="h5">{{ sala.nome }}</h2>
                     {% if sala.disponivel and sala.id not in ids_bloqueadas_hoje %}
-                    <span class="badge text-bg-success status-pill">Disponível</span>
+                    <span class="badge text-bg-success py-2 status-pill">Disponível</span>
                     {% elif not sala.ativa %}
-                    <span class="badge text-bg-secondary status-pill">Inativa</span>
+                    <span class="badge text-bg-secondary py-2  status-pill">Inativa</span>
                     {% elif sala.id in ids_bloqueadas_hoje %}
-                    <span class="badge text-bg-warning status-pill">Bloqueada hoje</span>
+                    <span class="badge text-bg-warning py-2 status-pill">Bloqueada hoje</span>
                     {% else %}
-                    <span class="badge text-bg-warning status-pill">Bloqueada</span>
+                    <span class="badge text-bg-warning py-2 status-pill">Bloqueada</span>
                     {% endif %}
                 </div>
                 <p class="mb-1"><strong>Local:</strong> {{ sala.localizacao }}</p>
