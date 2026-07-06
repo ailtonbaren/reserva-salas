@@ -395,6 +395,42 @@ def test_admin_cadastra_sala_valida(client, app):
         assert sala.capacidade == 5
 
 
+def test_admin_exclui_sala_sem_historico(client, app):
+    login_admin(client)
+    client.post(
+        "/admin/salas/nova",
+        data={
+            "nome": "Sala Temporária",
+            "localizacao": "CCT",
+            "capacidade": "4",
+            "descricao": "Sala criada para teste.",
+            "ativa": "on",
+        },
+    )
+    with app.app_context():
+        sala = Sala.query.filter_by(nome="Sala Temporária").first()
+        sala_id = sala.id
+
+    response = client.post(f"/admin/salas/{sala_id}/excluir", follow_redirects=True)
+    assert response.status_code == 200
+    assert "Sala excluída com sucesso".encode() in response.data
+    with app.app_context():
+        assert db.session.get(Sala, sala_id) is None
+
+
+def test_admin_nao_exclui_sala_com_reserva(client, app):
+    login(client)
+    client.post("/salas/horarios", data=reserva_payload(sala_id="1"))
+    client.get("/logout", follow_redirects=True)
+
+    login_admin(client)
+    response = client.post("/admin/salas/1/excluir", follow_redirects=True)
+    assert response.status_code == 200
+    assert "Não é possível excluir uma sala com reservas ou bloqueios registrados".encode() in response.data
+    with app.app_context():
+        assert db.session.get(Sala, 1) is not None
+
+
 def test_admin_rejeita_sala_com_capacidade_invalida(client, app):
     login_admin(client)
     response = client.post(

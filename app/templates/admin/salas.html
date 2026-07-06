@@ -23,7 +23,14 @@
                     {% elif sala.bloqueada %}<span class="badge text-bg-warning">Bloqueada</span>
                     {% else %}<span class="badge text-bg-success">Ativa</span>{% endif %}
                 </td>
-                <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.editar_sala', sala_id=sala.id) }}">Editar</a></td>
+                <td class="text-end">
+                    <div class="d-flex justify-content-end gap-2">
+                        <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.editar_sala', sala_id=sala.id) }}">Editar</a>
+                        <form method="post" action="{{ url_for('admin.excluir_sala', sala_id=sala.id) }}" onsubmit="return confirm('Deseja realmente excluir esta sala?');">
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Excluir</button>
+                        </form>
+                    </div>
+                </td>
             </tr>
             {% else %}
             <tr>

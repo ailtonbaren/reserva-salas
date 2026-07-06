@@ -65,6 +65,29 @@ def editar_sala(sala_id):
     return render_template("admin/sala_form.html", sala=sala)
 
 
+@admin_bp.route("/salas/<int:sala_id>/excluir", methods=["POST"])
+@login_required
+@admin_required
+def excluir_sala(sala_id):
+    sala = db.get_or_404(Sala, sala_id)
+
+    possui_reservas = Reserva.query.filter_by(sala_id=sala.id).first() is not None
+    possui_bloqueios = BloqueioSala.query.filter_by(sala_id=sala.id).first() is not None
+
+    if possui_reservas or possui_bloqueios:
+        flash(
+            "Não é possível excluir uma sala com reservas ou bloqueios registrados. "
+            "Desative a sala para impedir novas reservas.",
+            "danger",
+        )
+        return redirect(url_for("admin.salas"))
+
+    db.session.delete(sala)
+    db.session.commit()
+    flash("Sala excluída com sucesso.", "success")
+    return redirect(url_for("admin.salas"))
+
+
 @admin_bp.route("/usuarios")
 @login_required
 @admin_required
