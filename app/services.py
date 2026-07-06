@@ -77,8 +77,8 @@ def validar_reserva(usuario, sala, data, hora_inicio, hora_fim, reserva_ignorada
     if fim_dt <= inicio_dt:
         raise RegraReservaErro("A hora final deve ser posterior à hora inicial.")
 
-    if (fim_dt - inicio_dt).total_seconds() > 2 * 60 * 60:
-        raise RegraReservaErro("A reserva deve ter duração máxima de duas horas.")
+    if (fim_dt - inicio_dt).total_seconds() != 60 * 60:
+        raise RegraReservaErro("A reserva deve ter duração de uma hora.")
 
     if not usuario.is_admin:
         limite = obter_limite_reservas_ativas_aluno()
@@ -225,10 +225,8 @@ def cancelar_bloqueio_sala(bloqueio):
     return bloqueio
 
 
-def gerar_horarios_disponiveis(sala, data, duracao_horas=1):
-    if duracao_horas not in (1, 2):
-        duracao_horas = 1
-
+def gerar_horarios_disponiveis(sala, data):
+    duracao_horas = 1
     horarios = []
     inicio = datetime.combine(data, time(hour=8))
     fim_expediente = datetime.combine(data, time(hour=22))
