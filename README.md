@@ -88,7 +88,7 @@ A pasta `docs/` contém os documentos:
 - Gestão administrativa de usuários, com cadastro, edição, perfil, matrícula, senha e status ativo/inativo.
 - Consulta de salas.
 - Criação e cancelamento de reservas.
-- Bloqueio de reservas com data passada, duração maior que duas horas, horário final anterior ao inicial e conflitos de horário.
+- Bloqueio de reservas com data passada, duração diferente de uma hora, horário final anterior ao inicial e conflitos de horário.
 - Painel administrativo para cadastrar, editar, ativar, desativar e bloquear salas.
 - Bloqueio de salas por período e configuração do limite de reservas ativas por aluno.
 - Lista administrativa de reservas com cancelamento.
