@@ -82,9 +82,6 @@ def horarios():
     salas = Sala.query.filter_by(ativa=True).order_by(Sala.nome).all()
     sala_id = request.values.get("sala_id", type=int)
     data_texto = request.values.get("data") or date.today().strftime("%Y-%m-%d")
-    duracao = request.values.get("duracao", type=int) or 1
-    if duracao not in (1, 2):
-        duracao = 1
     sala = None
     horarios_disponiveis = []
 
@@ -99,13 +96,12 @@ def horarios():
         sala = salas[0]
 
     if sala:
-        horarios_disponiveis = gerar_horarios_disponiveis(sala, data_consulta, duracao)
+        horarios_disponiveis = gerar_horarios_disponiveis(sala, data_consulta)
 
     return render_template(
         "salas/horarios.html",
         salas=salas,
         sala=sala,
         data_consulta=data_consulta,
-        duracao=duracao,
         horarios=horarios_disponiveis,
     )
