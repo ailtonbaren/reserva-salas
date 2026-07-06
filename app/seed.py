@@ -15,7 +15,7 @@ def seed_data():
         db.session.add(admin)
 
     alunos = [
-        ("Aluno Demonstração", "aluno@uema.com", "2026001", "aluno123"),
+        ("Aluno test", "aluno@uema.com", "2026001", "aluno123"),
         ("Ailton Baren", "aluno1@uema.com", "2026002", "aluno123"),
         ("Tomás Araújo", "aluno2@uema.com", "2026003", "aluno123"),
         ("Fredrik Aursnes", "aluno3@uema.com", "2026004", "aluno123"),
