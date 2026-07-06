@@ -22,20 +22,6 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Banco de dados
-
-O sistema usa PostgreSQL. A URL padrão usada pela aplicação é:
-
-```text
-postgresql+psycopg://reserva_salas:reserva_salas@localhost:5432/reserva_salas
-```
-
-Se o banco usar outros dados de conexão:
-
-```bash
-export DATABASE_URL="postgresql+psycopg://usuario:senha@localhost:5432/reserva_salas"
-```
-
 ## Criar ou atualizar banco e dados iniciais
 
 ```bash
