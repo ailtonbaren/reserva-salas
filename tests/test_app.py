@@ -62,7 +62,7 @@ def test_criacao_reserva_valida_com_data_brasileira(client, app):
         assert Reserva.query.filter_by(status="ativa").count() == 1
 
 
-def test_criacao_reserva_valida_com_duracao_de_duas_horas(client, app):
+def test_rejeita_reserva_com_duracao_de_duas_horas(client, app):
     login(client)
     response = client.post(
         "/salas/horarios",
@@ -70,11 +70,9 @@ def test_criacao_reserva_valida_com_duracao_de_duas_horas(client, app):
         follow_redirects=True,
     )
     assert response.status_code == 200
-    assert "Reserva criada com sucesso".encode() in response.data
+    assert "A reserva deve ter duração de uma hora".encode() in response.data
     with app.app_context():
-        reserva = Reserva.query.first()
-        assert reserva.hora_inicio.strftime("%H:%M") == "08:00"
-        assert reserva.hora_fim.strftime("%H:%M") == "10:00"
+        assert Reserva.query.count() == 0
 
 
 def test_rejeita_reserva_data_passada(client, app):
@@ -99,7 +97,7 @@ def test_rejeita_hora_final_anterior_ao_inicio(client, app):
         assert Reserva.query.count() == 0
 
 
-def test_rejeita_reserva_com_mais_de_duas_horas(client, app):
+def test_rejeita_reserva_com_duracao_diferente_de_uma_hora(client, app):
     login(client)
     client.post(
         "/salas/horarios", data=reserva_payload(hora_inicio="09:00", hora_fim="11:30")
@@ -185,12 +183,13 @@ def test_horarios_disponiveis_renderiza(client):
     assert "Horários disponíveis".encode() in response.data
 
 
-def test_horarios_disponiveis_com_duracao_de_duas_horas(client):
+def test_horarios_disponiveis_mostra_apenas_duracao_de_uma_hora(client):
     login(client)
     response = client.get("/salas/horarios?sala_id=1&duracao=2")
     assert response.status_code == 200
-    assert b"08:00 - 10:00" in response.data
-    assert b"2h" in response.data
+    assert b"08:00 - 09:00" in response.data
+    assert b"09:00 - 11:00" not in response.data
+    assert b"2h" not in response.data
 
 
 def test_horario_reservado_mostra_finalidade(client):
