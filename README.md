@@ -82,8 +82,6 @@ A pasta `docs/` contém os documentos:
 - `validacaoFINAL`
 - `comandosFINAL`
 
-A pasta `docsLocal/`, quando existir, é apenas material local de apoio e está ignorada pelo Git.
-
 ## Funcionalidades
 
 - Login de aluno e administrador.
