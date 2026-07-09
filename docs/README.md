@@ -10,5 +10,3 @@ Documentos finais do projeto **Reserva de Salas de Estudo** para entrega da disc
 - `plano_de_testes.pdf`
 - `manual_do_usuario.pdf`
 - `termo_de_homologacao.pdf`
-- `validacaoFINAL`
-- `comandosFINAL`
