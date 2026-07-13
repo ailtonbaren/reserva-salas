@@ -79,7 +79,7 @@ def validar_reserva(usuario, sala, data, hora_inicio, hora_fim, reserva_ignorada
     if fim_dt <= inicio_dt:
         raise RegraReservaErro("A hora final deve ser posterior à hora inicial.")
 
-    if (fim_dt - inicio_dt).total_seconds() != 60 * 60:
+    if (fim_dt - inicio_dt).total_seconds() != 3600:
         raise RegraReservaErro("A reserva deve ter duração de uma hora.")
 
     if not usuario.is_admin:
