@@ -1,4 +1,5 @@
-from datetime import date, time, timedelta
+from datetime import date, datetime, time, timedelta
+from unittest.mock import patch
 
 from app.extensions import db
 from app.models import BloqueioSala, ConfiguracaoSistema, Reserva, Sala, Usuario
@@ -86,6 +87,48 @@ def test_rejeita_reserva_data_passada(client, app):
     assert response.status_code == 200
     with app.app_context():
         assert Reserva.query.count() == 0
+
+
+def test_rejeita_reserva_em_horario_passado_no_dia_atual(client, app):
+    agora = datetime.combine(date.today(), time(hour=17))
+
+    with patch("app.services.datetime", wraps=datetime) as datetime_mock:
+        datetime_mock.now.return_value = agora
+        login(client)
+        response = client.post(
+            "/salas/horarios",
+            data=reserva_payload(
+                data=date.today().strftime("%Y-%m-%d"),
+                hora_inicio="08:00",
+                hora_fim="09:00",
+            ),
+            follow_redirects=True,
+        )
+
+    assert "Não é permitido criar reservas em datas ou horários passados".encode() in response.data
+    with app.app_context():
+        assert Reserva.query.count() == 0
+
+
+def test_permite_reserva_em_horario_futuro_no_dia_atual(client, app):
+    agora = datetime.combine(date.today(), time(hour=17))
+
+    with patch("app.services.datetime", wraps=datetime) as datetime_mock:
+        datetime_mock.now.return_value = agora
+        login(client)
+        response = client.post(
+            "/salas/horarios",
+            data=reserva_payload(
+                data=date.today().strftime("%Y-%m-%d"),
+                hora_inicio="18:00",
+                hora_fim="19:00",
+            ),
+            follow_redirects=True,
+        )
+
+    assert "Reserva criada com sucesso".encode() in response.data
+    with app.app_context():
+        assert Reserva.query.filter_by(status="ativa").count() == 1
 
 
 def test_rejeita_hora_final_anterior_ao_inicio(client, app):

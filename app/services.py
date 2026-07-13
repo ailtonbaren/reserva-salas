@@ -68,11 +68,13 @@ def validar_reserva(usuario, sala, data, hora_inicio, hora_fim, reserva_ignorada
     if not sala or not sala.disponivel:
         raise RegraReservaErro("A sala está inativa ou bloqueada e não pode ser reservada.")
 
-    if data < date.today():
-        raise RegraReservaErro("Não é permitido criar reservas em datas passadas.")
-
     inicio_dt = datetime.combine(data, hora_inicio)
     fim_dt = datetime.combine(data, hora_fim)
+
+    if inicio_dt <= datetime.now():
+        raise RegraReservaErro(
+            "Não é permitido criar reservas em datas ou horários passados."
+        )
 
     if fim_dt <= inicio_dt:
         raise RegraReservaErro("A hora final deve ser posterior à hora inicial.")
