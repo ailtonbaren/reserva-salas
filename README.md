@@ -1,6 +1,6 @@
 # Reserva de Salas de Estudo
 
-Sistema web acadêmico para reserva de salas de estudo, com autenticação, perfis de aluno e administrador, controle de conflitos de horário e documentação do projeto.
+Sistema web acadêmico desenvolvido para a disciplina de Análise e Projeto de Sistemas, voltado à reserva de salas de estudo, com autenticação, perfis de aluno e administrador, controle de conflitos de horário e documentação do projeto.
 
 ## Stack
 
