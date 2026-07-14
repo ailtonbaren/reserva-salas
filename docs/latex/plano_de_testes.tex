@@ -1,0 +1,100 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{hyperref}
+\geometry{a4paper, margin=2.5cm}
+\title{\textbf{Plano de Testes}\\Sistema Reserva de Salas de Estudo}
+\author{Ailton Baren Pereira da Silva}
+\date{Junho de 2026}
+\begin{document}
+\maketitle
+
+\section{Objetivo}
+Validar se o sistema atende aos principais fluxos funcionais, regras de negócio e restrições de acesso. O plano contempla testes automatizados com \texttt{pytest} e validação manual para demonstração acadêmica.
+
+\section{Ambiente}
+\begin{itemize}
+    \item Python 3, Flask, Flask-SQLAlchemy e Flask-Login.
+    \item PostgreSQL como banco da aplicação.
+    \item Jinja2 e Bootstrap 5 por CDN.
+    \item \texttt{pytest} para testes automatizados.
+\end{itemize}
+
+\section{Estratégia}
+Os testes automatizados utilizam o cliente de testes do Flask e banco isolado em memória, permitindo validar as regras de negócio sem depender do banco PostgreSQL de desenvolvimento.
+
+\section{Escopo}
+\subsection{Incluído}
+\begin{itemize}
+    \item Login válido e inválido.
+    \item Acesso protegido e bloqueio de área administrativa para aluno.
+    \item Cadastro e edição de usuários pelo administrador.
+    \item Consulta de salas e horários.
+    \item Indicação de sala bloqueada no dia atual na lista de salas.
+    \item Criação, rejeição e cancelamento de reservas.
+    \item Cadastro, edição e exclusão controlada de salas.
+    \item Bloqueio de salas por período.
+    \item Configuração de limite de reservas ativas.
+    \item Renderização das principais telas.
+\end{itemize}
+
+\subsection{Não incluído}
+\begin{itemize}
+    \item Testes de carga.
+    \item Testes em múltiplos navegadores.
+    \item Testes de segurança avançados.
+    \item Testes com serviços externos.
+\end{itemize}
+
+\section{Casos de Teste}
+\begin{longtable}{|p{1.6cm}|p{6.2cm}|p{5.4cm}|p{1.8cm}|}
+\hline
+\textbf{ID} & \textbf{Caso} & \textbf{Resultado esperado} & \textbf{Status} \\ \hline
+CT-01 & Login com credenciais válidas & Usuário autenticado & Aprovado \\ \hline
+CT-02 & Login com senha inválida & Mensagem de erro exibida & Aprovado \\ \hline
+CT-03 & Página protegida sem login & Redirecionamento para login & Aprovado \\ \hline
+CT-04 & Aluno acessa painel admin & Erro 403 & Aprovado \\ \hline
+CT-05 & Admin cadastra usuário & Usuário salvo e apto a login & Aprovado \\ \hline
+CT-06 & Admin cadastra e-mail duplicado & Cadastro rejeitado & Aprovado \\ \hline
+CT-07 & Admin edita usuário sem senha nova & Senha anterior preservada & Aprovado \\ \hline
+CT-08 & Criação de reserva válida & Reserva ativa criada & Aprovado \\ \hline
+CT-09 & Reserva em data passada & Reserva rejeitada & Aprovado \\ \hline
+CT-10 & Hora final anterior à inicial & Reserva rejeitada & Aprovado \\ \hline
+CT-11 & Reserva com duração diferente de uma hora & Reserva rejeitada & Aprovado \\ \hline
+CT-12 & Conflito de horário da sala & Reserva rejeitada & Aprovado \\ \hline
+CT-13 & Cancelamento com motivo & Reserva cancelada & Aprovado \\ \hline
+CT-14 & Cancelamento sem motivo & Cancelamento rejeitado & Aprovado \\ \hline
+CT-15 & Horários com duração fixa de uma hora & Horários de uma hora exibidos & Aprovado \\ \hline
+CT-16 & Horário reservado mostra finalidade & Finalidade exibida & Aprovado \\ \hline
+CT-17 & Admin cadastra sala válida & Sala salva & Aprovado \\ \hline
+CT-18 & Sala com capacidade inválida & Sala rejeitada & Aprovado \\ \hline
+CT-19 & Bloqueio por período & Bloqueio ativo criado & Aprovado \\ \hline
+CT-20 & Bloqueio impede reserva & Reserva rejeitada & Aprovado \\ \hline
+CT-21 & Admin cancela bloqueio & Bloqueio inativo & Aprovado \\ \hline
+CT-22 & Admin configura limite & Configuração salva & Aprovado \\ \hline
+CT-23 & Aluno excede limite & Reserva rejeitada & Aprovado \\ \hline
+CT-24 & Lista de salas com bloqueio do dia atual & Sala exibida como bloqueada hoje & Aprovado \\ \hline
+CT-25 & Admin exclui sala sem histórico & Sala removida & Aprovado \\ \hline
+CT-26 & Admin tenta excluir sala com reserva & Exclusão rejeitada & Aprovado \\ \hline
+\end{longtable}
+
+\section{Execução}
+Comando utilizado:
+\begin{verbatim}
+source .venv/bin/activate
+pytest
+\end{verbatim}
+
+\section{Resultado}
+Última execução registrada:
+\begin{verbatim}
+36 passed
+\end{verbatim}
+
+\section{Critérios de Aceite}
+O sistema é aprovado nos testes quando todos os testes automatizados passam, as regras de reserva são respeitadas, o acesso administrativo é protegido e as mensagens são exibidas em português.
+
+\end{document}

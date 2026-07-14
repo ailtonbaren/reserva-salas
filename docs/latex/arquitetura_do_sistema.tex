@@ -1,0 +1,87 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{hyperref}
+\geometry{a4paper, margin=2.5cm}
+\title{\textbf{Arquitetura do Sistema}\\Reserva de Salas de Estudo}
+\author{Ailton Baren Pereira da Silva}
+\date{Junho de 2026}
+\begin{document}
+\maketitle
+
+\section{Visão Geral}
+O sistema é uma aplicação web monolítica desenvolvida em Flask, com renderização server-side via Jinja2, persistência em PostgreSQL e interface responsiva com Bootstrap 5.
+
+\section{Stack}
+\begin{itemize}
+    \item Python 3 e Flask.
+    \item Flask-SQLAlchemy e PostgreSQL com psycopg.
+    \item Flask-Login.
+    \item Jinja2.
+    \item Bootstrap 5 por CDN.
+    \item pytest.
+\end{itemize}
+
+\section{Organização}
+\begin{verbatim}
+app/
+  routes/
+  templates/
+  static/
+  models.py
+  services.py
+  seed.py
+  auth_utils.py
+  extensions.py
+tests/
+docs/
+init_db.py
+run.py
+requirements.txt
+\end{verbatim}
+
+\section{Camadas}
+\subsection{Aplicação}
+Arquivo \texttt{app/\_\_init\_\_.py}: cria a aplicação, configura banco, registra blueprints e define páginas de erro.
+
+\subsection{Modelos}
+Arquivo \texttt{app/models.py}: define \texttt{Usuario}, \texttt{Sala}, \texttt{Reserva}, \texttt{BloqueioSala} e \texttt{ConfiguracaoSistema}.
+
+\subsection{Rotas}
+\begin{itemize}
+    \item \texttt{auth.py}: login e logout.
+    \item \texttt{main.py}: dashboard.
+    \item \texttt{salas.py}: salas e horários.
+    \item \texttt{reservas.py}: minhas reservas e cancelamento.
+    \item \texttt{admin.py}: usuários, salas, reservas, bloqueios e configurações.
+\end{itemize}
+
+\subsection{Serviços}
+Arquivo \texttt{app/services.py}: centraliza regras de reserva, conflitos, limite de reservas, bloqueios e cancelamentos.
+
+\subsection{Autenticação}
+O Flask-Login controla sessão de usuário. Rotas administrativas usam verificação de perfil administrador.
+
+\section{Banco de Dados}
+O banco da aplicação é PostgreSQL. A URL padrão é:
+\begin{verbatim}
+postgresql+psycopg://reserva_salas:reserva_salas@localhost:5432/reserva_salas
+\end{verbatim}
+
+Pode ser alterada pela variável \texttt{DATABASE\_URL}.
+
+\section{Fluxo de Reserva}
+O aluno seleciona sala, data e duração, informa a finalidade e solicita reserva. O serviço valida data, horário, duração, sala, conflitos, bloqueios e limite de reservas antes de persistir a reserva.
+
+\section{Fluxo Administrativo}
+O administrador gerencia usuários, salas, bloqueios, reservas e configurações. Todas as rotas administrativas exigem autenticação e perfil administrador.
+
+\section{Testes}
+Os testes ficam em \texttt{tests/} e são executados com:
+\begin{verbatim}
+pytest
+\end{verbatim}
+
+\end{document}

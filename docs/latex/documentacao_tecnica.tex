@@ -1,0 +1,404 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{float}
+\geometry{a4paper, margin=2.3cm}
+
+\title{\textbf{Documentação Técnica}\\Sistema Reserva de Salas de Estudo}
+\author{Ailton Baren Pereira da Silva}
+\date{Julho de 2026}
+
+\begin{document}
+\maketitle
+
+\section{Objetivo}
+Este documento consolida os principais artefatos técnicos do sistema Reserva de Salas de Estudo, reunindo arquitetura, modelo de dados, requisitos, rastreabilidade e riscos em um único arquivo para facilitar a entrega acadêmica.
+
+\subsection{Escopo da Documentação}
+O foco deste documento é registrar as decisões técnicas e os elementos de análise e projeto que sustentam o sistema implementado. A documentação contempla a visão geral da solução, os atores do sistema, os principais fluxos, a arquitetura, o modelo de dados, as regras de negócio, a rastreabilidade dos requisitos e os riscos do projeto.
+
+Não fazem parte deste documento detalhes de infraestrutura de produção, configuração de servidores externos, integração com sistemas acadêmicos reais ou implantação em nuvem, pois o projeto foi desenvolvido para execução local e demonstração acadêmica.
+
+\section{Diagrama de Casos de Uso}
+O diagrama de casos de uso apresenta as principais interações dos perfis Aluno e Administrador com o sistema.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{../../images/casos_de_uso.png}
+    \caption{Diagrama de casos de uso}
+\end{figure}
+
+\subsection{Atores}
+\begin{longtable}{|p{4cm}|p{10.5cm}|}
+\hline
+\textbf{Ator} & \textbf{Descrição} \\ \hline
+Aluno & Usuário que consulta salas, verifica horários disponíveis, cria reservas, acompanha suas reservas e pode cancelar suas próprias reservas mediante informação do motivo. \\ \hline
+Administrador & Usuário responsável pela gestão do sistema, incluindo usuários, salas, reservas, bloqueios, filtros administrativos e configurações gerais. \\ \hline
+\end{longtable}
+
+\subsection{Principais Casos de Uso}
+\begin{itemize}
+    \item Realizar login e logout.
+    \item Consultar salas cadastradas.
+    \item Consultar horários disponíveis por sala e data.
+    \item Criar reserva informando finalidade.
+    \item Cancelar reserva com motivo obrigatório.
+    \item Cadastrar e editar usuários pelo painel administrativo.
+    \item Cadastrar, editar, desativar, bloquear e excluir salas sem histórico.
+    \item Bloquear sala por período de dias.
+    \item Exibir salas bloqueadas no dia atual como indisponíveis na lista de salas.
+    \item Configurar o limite de reservas ativas por aluno.
+\end{itemize}
+
+\section{Arquitetura do Sistema}
+
+\subsection{Visão Geral}
+O sistema é uma aplicação web monolítica desenvolvida em Flask, com renderização server-side via Jinja2, persistência em PostgreSQL e interface responsiva com Bootstrap 5.
+
+A escolha por uma arquitetura monolítica é adequada ao escopo acadêmico, pois reduz a complexidade de implantação, facilita a demonstração em ambiente local e mantém as regras de negócio concentradas em uma única aplicação. Mesmo sendo simples, o projeto separa responsabilidades em módulos de rotas, modelos, serviços, templates, arquivos estáticos e testes.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{../../images/arquitetura.png}
+    \caption{Arquitetura do sistema}
+\end{figure}
+
+\subsection{Stack}
+\begin{itemize}
+    \item Python 3 e Flask.
+    \item Flask-SQLAlchemy e PostgreSQL com psycopg.
+    \item Flask-Login para autenticação.
+    \item Jinja2 para templates.
+    \item Bootstrap 5 por CDN.
+    \item pytest para testes automatizados.
+\end{itemize}
+
+\subsection{Justificativa da Stack}
+\begin{itemize}
+    \item Flask foi escolhido por permitir desenvolvimento rápido de aplicações web server-side.
+    \item Flask-SQLAlchemy facilita o mapeamento entre classes Python e tabelas do PostgreSQL.
+    \item Flask-Login simplifica autenticação, sessão e proteção de rotas.
+    \item PostgreSQL foi adotado como banco relacional principal, mais adequado que SQLite para uma proposta próxima de implantação real.
+    \item Jinja2 e Bootstrap 5 permitem criar telas responsivas sem necessidade de React, Node.js ou APIs externas.
+    \item pytest permite validar regras de negócio de forma automatizada e repetível.
+\end{itemize}
+
+\subsection{Organização}
+\begin{verbatim}
+app/
+  routes/
+  templates/
+  static/
+  models.py
+  services.py
+  seed.py
+  auth_utils.py
+  extensions.py
+tests/
+docs/
+init_db.py
+run.py
+requirements.txt
+\end{verbatim}
+
+\subsection{Camadas}
+\begin{itemize}
+    \item Aplicação: cria a instância Flask, registra blueprints e configura extensões.
+    \item Modelos: define entidades persistidas no banco.
+    \item Rotas: organiza os fluxos de autenticação, dashboard, salas, reservas e administração.
+    \item Serviços: centraliza regras de negócio de reservas, bloqueios, cancelamentos e configurações.
+    \item Templates: renderiza as telas HTML com Jinja2 e Bootstrap.
+    \item Testes: valida regras de negócio, rotas e renderização das principais telas.
+\end{itemize}
+
+\subsection{Blueprints e Responsabilidades}
+\begin{longtable}{|p{4cm}|p{10.5cm}|}
+\hline
+\textbf{Arquivo} & \textbf{Responsabilidade} \\ \hline
+\texttt{auth.py} & Controla login e logout dos usuários. \\ \hline
+\texttt{main.py} & Renderiza o dashboard conforme o perfil autenticado. \\ \hline
+\texttt{salas.py} & Lista salas, aplica filtros, considera bloqueios do dia atual e exibe horários disponíveis para reserva. \\ \hline
+\texttt{reservas.py} & Lista reservas do aluno e processa cancelamentos. \\ \hline
+\texttt{admin.py} & Concentra as funcionalidades administrativas: usuários, salas, exclusão controlada de salas, reservas, bloqueios e configurações. \\ \hline
+\end{longtable}
+
+\subsection{Fluxo Geral de Requisição}
+O fluxo de uma requisição segue a estrutura tradicional de uma aplicação Flask:
+\begin{enumerate}
+    \item O usuário acessa uma rota pelo navegador.
+    \item O Flask direciona a requisição ao blueprint responsável.
+    \item A rota valida autenticação e permissões quando necessário.
+    \item As regras de negócio são executadas nos serviços.
+    \item Os modelos SQLAlchemy consultam ou persistem dados no PostgreSQL.
+    \item A resposta é renderizada em template Jinja2 ou redirecionada para outra rota.
+\end{enumerate}
+
+\section{Modelo de Dados}
+
+\subsection{Entidades}
+\begin{longtable}{|p{4cm}|p{10.5cm}|}
+\hline
+\textbf{Entidade} & \textbf{Descrição} \\ \hline
+Usuario & Representa alunos e administradores. Armazena nome, e-mail, matrícula, senha com hash, perfil e status ativo. \\ \hline
+Sala & Representa uma sala de estudo, com nome, localização, capacidade, descrição, status ativo e indicação de bloqueio. \\ \hline
+Reserva & Representa uma reserva feita por um usuário para uma sala em uma data e horário. Possui finalidade, status, motivo de cancelamento e data de criação. \\ \hline
+BloqueioSala & Representa bloqueios administrativos de sala por período, com motivo e status ativo. \\ \hline
+ConfiguracaoSistema & Armazena configurações globais, como o limite máximo de reservas ativas por aluno. \\ \hline
+\end{longtable}
+
+\subsection{Principais Campos}
+\begin{longtable}{|p{4cm}|p{5cm}|p{5.5cm}|}
+\hline
+\textbf{Tabela} & \textbf{Campo} & \textbf{Finalidade} \\ \hline
+usuarios & perfil & Define se o usuário atua como aluno ou administrador. \\ \hline
+usuarios & senha\_hash & Armazena a senha com hash seguro, evitando persistência de senha em texto puro. \\ \hline
+salas & ativa & Indica se a sala está disponível para uso no sistema. \\ \hline
+salas & bloqueada & Indica bloqueio geral da sala para manutenção. \\ \hline
+reservas & status & Controla se a reserva está ativa ou cancelada. \\ \hline
+reservas & finalidade & Registra o motivo acadêmico da reserva e aparece na consulta de horários ocupados. \\ \hline
+reservas & motivo\_cancelamento & Registra a justificativa do cancelamento. \\ \hline
+bloqueios\_sala & data e data\_fim & Definem o período em que a sala ficará bloqueada. \\ \hline
+configuracoes\_sistema & chave e valor & Permitem guardar configurações globais sem alterar código. \\ \hline
+\end{longtable}
+
+\subsection{Relacionamentos}
+\begin{itemize}
+    \item Um usuário pode possuir várias reservas.
+    \item Uma sala pode possuir várias reservas.
+    \item Uma sala pode possuir vários bloqueios.
+    \item Uma reserva pertence a um usuário e a uma sala.
+    \item Um bloqueio pertence a uma sala.
+\end{itemize}
+
+\subsection{Modelo Físico}
+O modelo físico representa as tabelas efetivamente persistidas pelo SQLAlchemy no PostgreSQL, incluindo chaves primárias, chaves estrangeiras e relacionamentos.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{../../images/modelo_de_dados.png}
+    \caption{Modelo de dados do sistema Reserva de Salas de Estudo}
+\end{figure}
+
+\subsection{Diagrama de Classes}
+O diagrama de classes representa as principais classes Python utilizadas pelo SQLAlchemy, incluindo atributos, propriedades e associações entre entidades. Ele é semelhante ao modelo de dados porque as classes do SQLAlchemy são utilizadas como base para criação das tabelas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{../../images/diagrama_de_classes.png}
+    \caption{Diagrama de classes}
+\end{figure}
+
+\subsection{Observações sobre Persistência}
+O sistema utiliza \texttt{db.create\_all()} no script \texttt{init\_db.py} para criar as tabelas quando ainda não existem. O mesmo script também executa ajustes simples de colunas e insere os dados iniciais por meio do \texttt{seed.py}. Para uma implantação de produção, seria recomendável utilizar uma ferramenta formal de migração, como Flask-Migrate/Alembic, mas isso ficou fora do escopo acadêmico definido.
+
+\section{Requisitos}
+
+\subsection{Requisitos Funcionais}
+\begin{longtable}{|p{2cm}|p{12cm}|}
+\hline
+\textbf{ID} & \textbf{Requisito} \\ \hline
+RF-01 & Permitir login de usuários cadastrados. \\ \hline
+RF-02 & Permitir logout. \\ \hline
+RF-03 & Exibir dashboard conforme o perfil. \\ \hline
+RF-04 & Permitir consulta de salas. \\ \hline
+RF-05 & Permitir consulta de horários por sala e data, com blocos de uma hora. \\ \hline
+RF-06 & Permitir criação de reservas com finalidade. \\ \hline
+RF-07 & Permitir visualização das próprias reservas. \\ \hline
+RF-08 & Permitir cancelamento de reserva com motivo. \\ \hline
+RF-09 & Permitir cadastro de usuários pelo administrador. \\ \hline
+RF-10 & Permitir edição de usuários pelo administrador. \\ \hline
+RF-11 & Permitir ativar e desativar usuários. \\ \hline
+RF-12 & Permitir cadastro de salas. \\ \hline
+RF-13 & Permitir edição de salas. \\ \hline
+RF-14 & Permitir ativar, desativar e bloquear salas. \\ \hline
+RF-15 & Permitir visualização administrativa de reservas. \\ \hline
+RF-16 & Permitir filtro administrativo de reservas. \\ \hline
+RF-17 & Permitir cancelamento administrativo de reservas. \\ \hline
+RF-18 & Permitir bloqueio de salas por período. \\ \hline
+RF-19 & Permitir cancelamento de bloqueios. \\ \hline
+RF-20 & Permitir configuração do limite de reservas ativas por aluno. \\ \hline
+RF-21 & Exibir páginas 403 e 404. \\ \hline
+RF-22 & Permitir exclusão de salas sem reservas ou bloqueios registrados. \\ \hline
+RF-23 & Exibir bloqueios do dia atual na lista de salas e nos filtros de disponibilidade. \\ \hline
+\end{longtable}
+
+\subsection{Priorização}
+Os requisitos essenciais foram aqueles necessários para demonstrar o fluxo completo de reserva de sala com controle de conflito e separação de perfis. Funcionalidades administrativas como gestão de usuários, salas, bloqueios, exclusão controlada de salas e limite de reservas foram incluídas para tornar o sistema demonstrável de ponta a ponta.
+
+\subsection{Requisitos Não Funcionais}
+\begin{longtable}{|p{2cm}|p{12cm}|}
+\hline
+\textbf{ID} & \textbf{Requisito} \\ \hline
+RNF-01 & Utilizar Python 3 e Flask. \\ \hline
+RNF-02 & Utilizar PostgreSQL como banco da aplicação. \\ \hline
+RNF-03 & Utilizar Flask-SQLAlchemy para persistência. \\ \hline
+RNF-04 & Utilizar Flask-Login para autenticação. \\ \hline
+RNF-05 & Utilizar Jinja2 para templates. \\ \hline
+RNF-06 & Utilizar Bootstrap 5 por CDN. \\ \hline
+RNF-07 & Ter layout responsivo. \\ \hline
+RNF-08 & Possuir testes automatizados com pytest. \\ \hline
+RNF-09 & Armazenar senhas com hash seguro. \\ \hline
+RNF-10 & Executar localmente sem Docker, React, Node.js, APIs externas ou nuvem. \\ \hline
+\end{longtable}
+
+\subsection{Regras de Negócio}
+\begin{longtable}{|p{2cm}|p{12cm}|}
+\hline
+\textbf{ID} & \textbf{Regra} \\ \hline
+RN-01 & A hora final deve ser posterior à hora inicial. \\ \hline
+RN-02 & Não aceitar reservas em datas passadas. \\ \hline
+RN-03 & A reserva deve ter duração fixa de uma hora. \\ \hline
+RN-04 & Uma sala não pode possuir reservas ativas sobrepostas na mesma data. \\ \hline
+RN-05 & Somente proprietário ou administrador pode cancelar reserva. \\ \hline
+RN-06 & Salas inativas ou bloqueadas não podem ser reservadas. \\ \hline
+RN-07 & Um aluno não pode criar reservas sobrepostas. \\ \hline
+RN-08 & Somente administradores gerenciam usuários, salas, bloqueios e configurações. \\ \hline
+RN-09 & Páginas protegidas exigem autenticação. \\ \hline
+RN-10 & Senhas devem ser armazenadas com hash seguro. \\ \hline
+RN-11 & Cancelamento de reserva deve registrar motivo. \\ \hline
+RN-12 & O administrador pode configurar o limite de reservas ativas. \\ \hline
+RN-13 & Bloqueios por período impedem reservas no intervalo. \\ \hline
+RN-14 & E-mails de usuários devem ser únicos. \\ \hline
+RN-15 & O administrador não pode desativar seu próprio usuário. \\ \hline
+RN-16 & Salas com reservas ou bloqueios registrados não podem ser excluídas, preservando o histórico do sistema. \\ \hline
+RN-17 & Bloqueios ativos para o dia atual devem ser refletidos na lista de salas e no contador de salas disponíveis. \\ \hline
+\end{longtable}
+
+\subsection{Regras Implementadas no Backend}
+As validações críticas foram implementadas no backend, principalmente no arquivo \texttt{services.py}. Essa decisão evita que regras importantes dependam apenas da interface HTML. Entre as principais validações estão:
+\begin{itemize}
+    \item impedimento de reservas em datas passadas;
+    \item validação de duração fixa de uma hora;
+    \item verificação de sobreposição de horários;
+    \item bloqueio de reservas em salas inativas ou bloqueadas;
+    \item limite de reservas ativas por aluno;
+    \item obrigatoriedade de motivo no cancelamento.
+    \item impedimento de exclusão de salas com histórico de reservas ou bloqueios.
+    \item exibição de bloqueios por período na lista de salas quando atingem a data atual.
+\end{itemize}
+
+\section{Matriz de Rastreabilidade}
+\small
+\begin{longtable}{|p{2cm}|p{2.5cm}|p{3.2cm}|p{6.8cm}|}
+\hline
+\textbf{Req.} & \textbf{Regra} & \textbf{Rota} & \textbf{Teste} \\ \hline
+RF-01 & RN-09, RN-10 & /login & test\_login\_valido; test\_login\_invalido \\ \hline
+RF-03 & RN-09 & /dashboard & test\_templates\_principais\_do\_aluno\_renderizam \\ \hline
+RF-04 & RN-09 & /salas/ & test\_filtro\_de\_salas\_por\_capacidade \\ \hline
+RF-05 & RN-06 & /salas/horarios & test\_horarios\_disponiveis\_renderiza \\ \hline
+RF-06 & RN-01 a RN-04, RN-06, RN-07, RN-12, RN-13 & /salas/horarios & testes de criação e rejeição de reserva \\ \hline
+RF-08 & RN-05, RN-11 & /reservas/\{id\}/cancelar & test\_cancelamento\_de\_reserva \\ \hline
+RF-09 & RN-08, RN-10, RN-14 & /admin/usuarios/novo & test\_admin\_cadastra\_usuario\_aluno \\ \hline
+RF-10 & RN-08, RN-10, RN-14, RN-15 & /admin/usuarios/\{id\}/editar & test\_admin\_edita\_usuario\_sem\_alterar\_senha \\ \hline
+RF-12 & RN-08 & /admin/salas/nova & test\_admin\_cadastra\_sala\_valida \\ \hline
+RF-22 & RN-08, RN-16 & /admin/salas/\{id\}/excluir & test\_admin\_exclui\_sala\_sem\_historico; test\_admin\_nao\_exclui\_sala\_com\_reserva \\ \hline
+RF-18 & RN-08, RN-13 & /admin/bloqueios & test\_admin\_cria\_bloqueio\_por\_periodo \\ \hline
+RF-20 & RN-08, RN-12 & /admin/configuracoes & test\_admin\_atualiza\_limite\_de\_reservas \\ \hline
+RF-21 & RN-08, RN-09 & /admin/ & test\_bloqueio\_acesso\_administrativo\_para\_aluno \\ \hline
+RF-23 & RN-13, RN-17 & /salas/ & test\_lista\_salas\_mostra\_bloqueio\_do\_dia\_atual \\ \hline
+\end{longtable}
+\normalsize
+
+\subsection{Análise da Cobertura}
+A matriz mostra que os requisitos centrais possuem ligação com regras de negócio, rotas e testes automatizados. Os testes cobrem os fluxos críticos de autenticação, autorização, criação de reserva, rejeições de regras inválidas, cancelamento, gestão administrativa, bloqueios, exclusão controlada de salas e configuração de limite.
+
+Aspectos visuais, como responsividade, disposição dos elementos e experiência de navegação, foram tratados por inspeção manual durante a demonstração, pois são menos adequados para a suíte automatizada atual.
+
+\section{Gerenciamento de Riscos}
+\begin{longtable}{|p{1.2cm}|p{4cm}|p{2cm}|p{1.8cm}|p{5cm}|}
+\hline
+\textbf{ID} & \textbf{Risco} & \textbf{Prob.} & \textbf{Impacto} & \textbf{Mitigação e resposta} \\ \hline
+R-01 & PostgreSQL não instalado ou iniciado & Média & Alto & Documentar instalação, iniciar serviço e validar \texttt{DATABASE\_URL}. \\ \hline
+R-02 & Erro de conexão com banco & Média & Alto & Conferir usuário, senha, host, porta e banco. \\ \hline
+R-03 & Conflito de reservas não detectado & Baixa & Alto & Centralizar regras em serviços e manter testes regressivos. \\ \hline
+R-04 & Aluno acessar área administrativa & Baixa & Alto & Aplicar \texttt{login\_required} e \texttt{admin\_required}. \\ \hline
+R-05 & Senha armazenada de forma insegura & Baixa & Alto & Usar hash seguro via Werkzeug. \\ \hline
+R-06 & Escopo crescer além do planejado & Média & Médio & Registrar exclusões e priorizar funcionalidades essenciais. \\ \hline
+R-07 & Falha na demonstração & Média & Alto & Manter seed, README, testes e banco inicializados. \\ \hline
+R-08 & Templates quebrados após alteração de rota & Média & Médio & Testar renderização das principais telas. \\ \hline
+R-09 & E-mail duplicado no cadastro de usuário & Média & Médio & Validar unicidade no backend. \\ \hline
+R-10 & Documentação desatualizada & Média & Médio & Revisar artefatos após mudanças de escopo. \\ \hline
+\end{longtable}
+
+\subsection{Estratégia de Resposta}
+Os riscos de maior impacto estão relacionados ao banco de dados, à integridade das reservas e ao controle de acesso. Para esses pontos, a estratégia adotada foi preventiva: documentação de comandos, validações centralizadas em serviços, testes automatizados e uso de decorators de autenticação e autorização.
+
+Riscos ligados à apresentação e documentação foram tratados com geração de artefatos finais em PDF, arquivo \texttt{comandosFINAL} e arquivo \texttt{validacaoFINAL}.
+
+\section{Segurança e Controle de Acesso}
+
+\subsection{Autenticação}
+A autenticação é feita com Flask-Login. Usuários precisam informar e-mail e senha. A senha armazenada no banco não fica em texto puro; ela é transformada em hash por funções do Werkzeug.
+
+\subsection{Autorização}
+As rotas administrativas usam o decorator \texttt{admin\_required}. Esse controle impede que alunos acessem funcionalidades de gestão, como cadastro de usuários, cadastro de salas, bloqueios, reservas administrativas e configurações.
+
+\subsection{Proteção de Dados}
+O sistema não implementa criptografia avançada, auditoria completa ou LGPD em nível de produção, pois esses pontos estão fora do escopo acadêmico definido. Ainda assim, evita o principal risco imediato ao não armazenar senhas em texto puro.
+
+\section{Testes e Qualidade}
+
+\subsection{Estratégia de Testes}
+Os testes automatizados utilizam pytest e o cliente de teste do Flask. A suíte usa banco isolado em memória para executar rapidamente e não depender do PostgreSQL local durante a validação das regras.
+
+\subsection{Cobertura Funcional}
+Os testes validam login, erro de login, proteção de rotas, bloqueio de acesso administrativo para aluno, cadastro e edição de usuários, criação de reservas, rejeição de reservas inválidas, cancelamentos, bloqueios, configuração de limite, exclusão controlada de salas, listagem de salas bloqueadas no dia atual e renderização das principais telas.
+
+\subsection{Resultado}
+A última execução registrada apresentou:
+\begin{verbatim}
+36 passed
+\end{verbatim}
+
+\section{Implantação Local}
+
+\subsection{Banco de Dados}
+O banco principal da aplicação é PostgreSQL. A URL padrão configurada no projeto é:
+\begin{verbatim}
+postgresql+psycopg://reserva_salas:reserva_salas@localhost:5432/reserva_salas
+\end{verbatim}
+
+Caso o ambiente local utilize outro usuário, senha ou banco, a variável \texttt{DATABASE\_URL} deve ser definida antes da execução.
+
+\subsection{Comandos Principais}
+\begin{verbatim}
+sudo systemctl start postgresql
+source .venv/bin/activate
+python init_db.py
+pytest
+python run.py
+\end{verbatim}
+
+\subsection{Dados Iniciais}
+O script de inicialização cria o administrador, alunos de demonstração, salas iniciais e configuração padrão de limite de reservas ativas por aluno.
+
+\section{Limitações e Evolução}
+
+\subsection{Limitações do Sistema}
+\begin{itemize}
+    \item Não há envio de notificações por e-mail.
+    \item Não há integração com sistema acadêmico real.
+    \item Não há cadastro público de usuários.
+    \item Não há painel de relatórios estatísticos avançados.
+    \item Não há migrações formais com Alembic.
+\end{itemize}
+
+\subsection{Possíveis Evoluções}
+\begin{itemize}
+    \item Adicionar Flask-Migrate para controle formal de mudanças no banco.
+    \item Criar relatórios de ocupação por sala e período.
+    \item Adicionar paginação nas listas administrativas.
+    \item Criar filtros avançados para usuários.
+    \item Adicionar notificações por e-mail para reserva e cancelamento.
+    \item Criar auditoria administrativa para alterações sensíveis.
+\end{itemize}
+
+\section{Conclusão}
+A documentação técnica consolida a estrutura do sistema, seus requisitos, regras de negócio, rastreabilidade, riscos, estratégia de testes e orientações de implantação local. O sistema possui escopo coerente com a proposta acadêmica, separação clara de responsabilidades, banco relacional, autenticação por perfil, validações no backend e testes automatizados suficientes para apoiar a demonstração e homologação.
+
+\end{document}

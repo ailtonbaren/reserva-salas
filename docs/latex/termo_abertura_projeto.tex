@@ -1,0 +1,242 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{hyperref}
+
+\geometry{a4paper, margin=2.5cm}
+
+\title{\textbf{Termo de Abertura do Projeto}\\Sistema Reserva de Salas de Estudo}
+\author{Ailton Baren Pereira da Silva}
+\date{Junho de 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Identificação do Projeto}
+
+\begin{longtable}{|p{5cm}|p{10cm}|}
+\hline
+\textbf{Nome do Projeto} & Reserva de Salas de Estudo \\ \hline
+\textbf{Tipo de Projeto} & Desenvolvimento de sistema web acadêmico \\ \hline
+\textbf{Instituição} & Universidade Estadual do Maranhão \\ \hline
+\textbf{Disciplina} & Análise e Projeto de Sistemas \\ \hline
+\textbf{Responsável técnico} & Ailton Baren Pereira da Silva \\ \hline
+\textbf{Data de abertura} & Junho de 2026 \\ \hline
+\textbf{Tecnologias previstas} & Python 3, Flask, Flask-SQLAlchemy, Flask-Login, PostgreSQL com psycopg, Jinja2, Bootstrap 5 por CDN e pytest \\ \hline
+\end{longtable}
+
+\section{Autorização do Projeto}
+
+Este Termo de Abertura autoriza formalmente o início do projeto Reserva de Salas de Estudo, cujo objetivo é desenvolver um sistema funcional para apoiar o gerenciamento de reservas de salas de estudo em ambiente acadêmico. O documento concede ao responsável técnico a autorização para planejar, implementar, testar, documentar e apresentar a solução no contexto da disciplina de Análise e Projeto de Sistemas.
+
+\section{Justificativa}
+
+A instituição necessita de um mecanismo simples e centralizado para organizar a utilização de salas de estudo. A ausência de controle informatizado pode causar reservas conflitantes, dificuldade de consulta de disponibilidade, baixo aproveitamento dos espaços e maior esforço administrativo. O sistema proposto busca reduzir esses problemas por meio de uma aplicação web com autenticação, controle de perfis, validações de regras de negócio e registro das reservas realizadas.
+
+\section{Objetivo Geral}
+
+Desenvolver um sistema web acadêmico para permitir que alunos consultem salas disponíveis, realizem reservas sem conflito de horário e acompanhem suas reservas, enquanto administradores gerenciam usuários, salas, bloqueios, configurações do sistema e reservas.
+
+\section{Objetivos SMART}
+
+\begin{longtable}{|p{4cm}|p{11cm}|}
+\hline
+\textbf{Critério} & \textbf{Descrição} \\ \hline
+\textbf{Específico} & Implementar um sistema web para controle de reservas de salas de estudo, com perfis de aluno e administrador, consulta de disponibilidade por horário, gestão de usuários e gestão administrativa de salas e reservas. \\ \hline
+\textbf{Mensurável} & O projeto será considerado atendido quando as funcionalidades principais estiverem implementadas, documentadas, conectadas ao PostgreSQL e com testes automatizados executando com sucesso. \\ \hline
+\textbf{Atingível} & A solução será desenvolvida com escopo acadêmico controlado, utilizando tecnologias compatíveis com a disciplina e execução local com PostgreSQL. \\ \hline
+\textbf{Relevante} & O sistema resolve uma necessidade acadêmica real relacionada ao uso organizado dos espaços de estudo. \\ \hline
+\textbf{Temporal} & A entrega deve ocorrer dentro do período definido para o projeto da disciplina de Análise e Projeto de Sistemas. \\ \hline
+\end{longtable}
+
+\section{Escopo do Projeto}
+
+\subsection{Inclusões}
+
+\begin{itemize}
+    \item Autenticação de usuários com perfis de aluno e administrador.
+    \item Cadastro, edição, ativação e desativação de usuários pelo administrador.
+    \item Consulta de salas cadastradas.
+    \item Consulta de horários disponíveis por sala e por data.
+    \item Criação de reservas com duração fixa de uma hora.
+    \item Exibição da finalidade da reserva nos horários já ocupados.
+    \item Cancelamento de reservas com confirmação e registro obrigatório do motivo.
+    \item Painel do aluno com resumo de reservas e salas disponíveis.
+    \item Painel administrativo para cadastro, edição, bloqueio, desativação e exclusão controlada de salas.
+    \item Bloqueio de salas por período de dias.
+    \item Exibição de salas bloqueadas no dia atual como indisponíveis na lista de salas.
+    \item Cancelamento administrativo de bloqueios de sala.
+    \item Configuração administrativa do limite de reservas ativas por aluno.
+    \item Listagem administrativa de reservas com filtros.
+    \item Interface responsiva com Bootstrap 5, menu superior, cartões, tabelas responsivas, badges de status e estados vazios.
+    \item Banco de dados PostgreSQL configurável por \texttt{DATABASE\_URL}.
+    \item Criação dos usuários iniciais por script de seed.
+    \item Validações de regras de negócio no backend.
+    \item Testes automatizados com pytest.
+    \item Documentação básica para instalação, execução, testes e uso do sistema.
+\end{itemize}
+
+\subsection{Exclusões}
+
+\begin{itemize}
+    \item Integração com sistemas acadêmicos externos.
+    \item Envio de notificações por e-mail, SMS ou aplicativos de mensagem.
+    \item Aplicativo mobile nativo.
+    \item Hospedagem em nuvem.
+    \item Uso de Docker, Node.js, React ou APIs externas.
+    \item Migrações formais com Flask-Migrate ou Alembic.
+    \item Cadastro público de usuários pela interface.
+    \item Controle financeiro, cobrança, multas ou autenticação institucional real.
+\end{itemize}
+
+\section{Principais Entregas}
+
+\begin{longtable}{|p{5cm}|p{10cm}|}
+\hline
+\textbf{Entrega} & \textbf{Descrição} \\ \hline
+\textbf{Aplicação web} & Sistema Flask funcional com autenticação, gestão de usuários, consulta de horários, reservas, salas, bloqueios, configurações e painel administrativo. \\ \hline
+\textbf{Banco de dados} & Banco PostgreSQL com tabelas para usuários, salas, reservas, bloqueios e configurações. \\ \hline
+\textbf{Dados iniciais} & Usuário administrador, contas de alunos, configuração de limite de reservas e salas de estudo para demonstração. \\ \hline
+\textbf{Testes automatizados} & Testes com pytest cobrindo login, gestão de usuários, reservas, conflitos, cancelamento, bloqueios, configurações e restrição de acesso administrativo. \\ \hline
+\textbf{Documentação} & README, solicitação do projeto, termo de abertura e demais artefatos necessários à homologação acadêmica. \\ \hline
+\end{longtable}
+
+\section{Requisitos de Alto Nível}
+
+\begin{itemize}
+    \item O sistema deve impedir acesso a páginas protegidas sem autenticação.
+    \item O sistema deve armazenar senhas com hash seguro.
+    \item O administrador deve conseguir cadastrar e editar usuários com nome, e-mail, matrícula, perfil, senha e status ativo.
+    \item O aluno deve conseguir consultar horários livres por sala e data.
+    \item O aluno deve conseguir criar reservas válidas com finalidade informada.
+    \item O sistema deve impedir reservas em datas passadas.
+    \item O sistema deve impedir horários inválidos e duração diferente de uma hora.
+    \item O sistema deve impedir sobreposição de reservas ativas para a mesma sala.
+    \item O sistema deve impedir que um aluno tenha reservas ativas sobrepostas.
+    \item O sistema deve respeitar o limite administrativo de reservas ativas por aluno.
+    \item O sistema deve impedir reserva de salas inativas ou bloqueadas.
+    \item Somente administradores devem gerenciar usuários, salas, bloqueios e configurações.
+    \item O administrador deve conseguir excluir salas sem reservas ou bloqueios registrados.
+    \item O sistema deve impedir exclusão de salas com histórico de reservas ou bloqueios.
+    \item Os usuários iniciais devem ser carregados por script de seed, e novos usuários devem poder ser cadastrados pelo administrador.
+    \item O cancelamento deve ser permitido ao proprietário da reserva ou ao administrador, sempre com motivo informado.
+\end{itemize}
+
+\section{Responsabilidades e Equipe}
+
+\begin{longtable}{|p{5cm}|p{10cm}|}
+\hline
+\textbf{Papel} & \textbf{Responsabilidade} \\ \hline
+\textbf{Responsável técnico} & Planejar, implementar, testar, documentar e apresentar o sistema. \\ \hline
+\textbf{Gerente do projeto} & Coordenar as atividades, controlar o escopo, acompanhar riscos e organizar as entregas acadêmicas. \\ \hline
+\textbf{Professor orientador} & Avaliar o projeto, orientar os artefatos esperados e validar a aderência à disciplina. \\ \hline
+\textbf{Usuário aluno} & Utilizar o sistema para consultar salas, escolher horários, realizar reservas e cancelar suas próprias reservas com motivo. \\ \hline
+\textbf{Usuário administrador} & Gerenciar usuários, salas, reservas, bloqueios, filtros administrativos e configurações do sistema. \\ \hline
+\end{longtable}
+
+\section{Partes Interessadas}
+
+\begin{longtable}{|p{5cm}|p{10cm}|}
+\hline
+\textbf{Stakeholder} & \textbf{Interesse no Projeto} \\ \hline
+\textbf{Alunos} & Ter acesso rápido à disponibilidade das salas e realizar reservas sem conflito. \\ \hline
+\textbf{Administração acadêmica} & Controlar o uso das salas, bloquear ambientes indisponíveis e acompanhar reservas. \\ \hline
+\textbf{Professor da disciplina} & Avaliar a aplicação dos conceitos de análise, projeto, implementação, testes, documentação e PMBOK. \\ \hline
+\textbf{Responsável técnico} & Entregar um sistema funcional, organizado e adequado aos critérios acadêmicos. \\ \hline
+\end{longtable}
+
+\section{Premissas}
+
+\begin{itemize}
+    \item O sistema será executado localmente para fins acadêmicos e de demonstração.
+    \item Os usuários iniciais serão criados por script de seed.
+    \item O banco PostgreSQL estará disponível no ambiente local de desenvolvimento e demonstração.
+    \item A conexão com o banco poderá ser ajustada pela variável de ambiente \texttt{DATABASE\_URL}.
+    \item O acesso à aplicação ocorrerá por navegador web.
+    \item A interface utilizará Bootstrap 5 por CDN.
+    \item Os testes automatizados poderão utilizar banco isolado em memória para validar regras de negócio sem depender do banco de desenvolvimento.
+\end{itemize}
+
+\section{Restrições}
+
+\begin{itemize}
+    \item O projeto não deve utilizar React, Node.js, Docker, APIs externas ou serviços em nuvem.
+    \item A persistência deve utilizar PostgreSQL.
+    \item As validações principais devem ocorrer no backend.
+    \item O sistema deve manter arquitetura simples, separando modelos, rotas, serviços, templates, arquivos estáticos e testes.
+    \item O sistema deve permanecer simples e adequado a uma demonstração acadêmica.
+    \item O prazo de entrega está condicionado ao calendário da disciplina.
+\end{itemize}
+
+\section{Riscos Iniciais}
+
+\begin{longtable}{|p{5cm}|p{6cm}|p{4cm}|}
+\hline
+\textbf{Risco} & \textbf{Impacto} & \textbf{Resposta planejada} \\ \hline
+\textbf{Conflitos de reserva não detectados} & Reservas duplicadas para a mesma sala ou aluno. & Centralizar as regras de negócio em serviços e criar testes automatizados. \\ \hline
+\textbf{Erro na estrutura do banco} & Falhas em execução por tabelas ou colunas ausentes. & Manter script de inicialização e atualização do banco de dados. \\ \hline
+\textbf{PostgreSQL indisponível} & A aplicação não inicia ou não cria tabelas no ambiente local. & Documentar instalação, usuário, banco e variável \texttt{DATABASE\_URL}. \\ \hline
+\textbf{Acesso indevido ao painel administrativo} & Usuários comuns poderiam alterar dados sensíveis. & Aplicar controle de perfil nas rotas administrativas. \\ \hline
+\textbf{Escopo crescer além do planejado} & Atraso na entrega e aumento de complexidade. & Registrar exclusões e priorizar funcionalidades essenciais. \\ \hline
+\textbf{Falha na demonstração} & Dificuldade de avaliação do sistema. & Manter dados iniciais, README e testes automatizados atualizados. \\ \hline
+\end{longtable}
+
+\section{Critérios de Aceite}
+
+\begin{itemize}
+    \item O sistema deve iniciar localmente sem erros.
+    \item O administrador deve conseguir acessar o painel administrativo.
+    \item O administrador deve conseguir cadastrar, editar, ativar e desativar usuários.
+    \item O aluno deve conseguir consultar horários por sala e data.
+    \item O aluno deve conseguir criar uma reserva válida com finalidade.
+    \item O sistema deve rejeitar reservas conflitantes, passadas ou com horário inválido.
+    \item O administrador deve conseguir cadastrar, editar, desativar, bloquear e excluir salas sem histórico.
+    \item O sistema deve impedir exclusão de salas com reservas ou bloqueios registrados.
+    \item O administrador deve conseguir configurar o limite de reservas ativas por aluno.
+    \item O sistema deve conter usuários iniciais criados pelo script de seed.
+    \item Usuários criados pelo administrador devem autenticar com senha armazenada em hash.
+    \item O cancelamento de reserva deve exigir e registrar motivo.
+    \item A tela de horários deve indicar finalidade de reservas ativas e motivo de bloqueios.
+    \item A lista de salas deve indicar bloqueios ativos no dia atual.
+    \item Os testes automatizados devem executar com sucesso.
+    \item A documentação deve conter comandos de instalação, execução e testes.
+\end{itemize}
+
+\section{PM Canvas Resumido}
+
+\begin{longtable}{|p{3.5cm}|p{11.5cm}|}
+\hline
+\textbf{Bloco} & \textbf{Descrição} \\ \hline
+\textbf{Justificativa} & Organizar a reserva de salas de estudo e evitar conflitos de uso. \\ \hline
+\textbf{Objetivo SMART} & Entregar um sistema web funcional, testado e documentado para reserva de salas de estudo dentro do período da disciplina. \\ \hline
+\textbf{Benefícios} & Redução de conflitos, maior transparência, controle administrativo e melhor aproveitamento das salas. \\ \hline
+\textbf{Produto} & Sistema web Reserva de Salas de Estudo. \\ \hline
+\textbf{Requisitos} & Login, gestão de usuários, reservas de uma hora, consulta de disponibilidade, gestão de salas, exclusão controlada de salas sem histórico, bloqueios por período, configurações, filtros, cancelamento com motivo, usuários iniciais por seed e testes. \\ \hline
+\textbf{Stakeholders} & Alunos, administrador acadêmico, professor da disciplina e responsável técnico. \\ \hline
+\textbf{Equipe} & Responsável técnico pelo desenvolvimento, testes e documentação. \\ \hline
+\textbf{Premissas} & Execução local, uso de PostgreSQL, dados iniciais por seed e interface web responsiva. \\ \hline
+\textbf{Restrições} & Sem React, Docker, Node.js, APIs externas ou nuvem; uso obrigatório da stack definida. \\ \hline
+\textbf{Riscos} & Conflitos de reserva, indisponibilidade do PostgreSQL, erro no banco, acesso indevido, aumento de escopo e falha na demonstração. \\ \hline
+\textbf{Linha do tempo} & Levantamento, implementação, testes, documentação e homologação acadêmica. \\ \hline
+\textbf{Custos} & Sem custos financeiros diretos; uso de ferramentas livres e ambiente local. \\ \hline
+\end{longtable}
+
+\section{Aprovação}
+
+Com a aprovação deste Termo de Abertura, considera-se autorizado o desenvolvimento do projeto Reserva de Salas de Estudo no contexto da disciplina de Análise e Projeto de Sistemas.
+
+\vspace{1.5cm}
+
+\begin{center}
+\begin{tabular}{p{7cm}p{7cm}}
+\hrulefill & \hrulefill \\
+Responsável técnico & Professor orientador \\
+\end{tabular}
+\end{center}
+
+\end{document}

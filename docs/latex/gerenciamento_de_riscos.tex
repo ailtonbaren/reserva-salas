@@ -1,0 +1,44 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\geometry{a4paper, margin=2.5cm}
+\title{\textbf{Gerenciamento de Riscos}\\Sistema Reserva de Salas de Estudo}
+\author{Ailton Baren Pereira da Silva}
+\date{Junho de 2026}
+\begin{document}
+\maketitle
+
+\section{Objetivo}
+Identificar, registrar e planejar respostas para riscos que possam afetar o desenvolvimento, a demonstração e a homologação do sistema.
+
+\section{Escala}
+\begin{itemize}
+    \item Probabilidade: baixa, média ou alta.
+    \item Impacto: baixo, médio ou alto.
+\end{itemize}
+
+\section{Matriz de Riscos}
+\begin{longtable}{|p{1.2cm}|p{4cm}|p{2cm}|p{1.8cm}|p{5cm}|}
+\hline
+\textbf{ID} & \textbf{Risco} & \textbf{Prob.} & \textbf{Impacto} & \textbf{Mitigação e resposta} \\ \hline
+R-01 & PostgreSQL não instalado ou iniciado & Média & Alto & Documentar instalação, iniciar serviço e validar \texttt{DATABASE\_URL}. \\ \hline
+R-02 & Erro de conexão com banco & Média & Alto & Conferir usuário, senha, host, porta e banco. \\ \hline
+R-03 & Conflito de reservas não detectado & Baixa & Alto & Centralizar regras em serviços e manter testes regressivos. \\ \hline
+R-04 & Aluno acessar área administrativa & Baixa & Alto & Aplicar \texttt{login\_required} e \texttt{admin\_required}. \\ \hline
+R-05 & Senha armazenada de forma insegura & Baixa & Alto & Usar hash seguro via Werkzeug. \\ \hline
+R-06 & Escopo crescer além do MVP & Média & Médio & Registrar exclusões e priorizar funcionalidades essenciais. \\ \hline
+R-07 & Falha na demonstração & Média & Alto & Manter seed, README, testes e banco inicializados. \\ \hline
+R-08 & Templates quebrados após alteração de rota & Média & Médio & Testar renderização das principais telas. \\ \hline
+R-09 & E-mail duplicado no cadastro de usuário & Média & Médio & Validar unicidade no backend. \\ \hline
+R-10 & Documentação desatualizada & Média & Médio & Revisar artefatos após mudanças de escopo. \\ \hline
+\end{longtable}
+
+\section{Riscos Aceitos}
+Não fazem parte do escopo: envio de e-mail, integração institucional, aplicativo mobile, hospedagem em nuvem e migrações formais com Alembic.
+
+\section{Monitoramento}
+Os riscos devem ser revisados antes da apresentação, após mudanças no banco, após alterações nas regras de negócio e após inclusão de novas telas administrativas.
+
+\end{document}

@@ -1,0 +1,72 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{hyperref}
+\geometry{a4paper, margin=2.5cm}
+\title{\textbf{Manual do Usuário}\\Sistema Reserva de Salas de Estudo}
+\author{Ailton Baren Pereira da Silva}
+\date{Junho de 2026}
+\begin{document}
+\maketitle
+
+\section{Acesso}
+A aplicação deve ser acessada pelo navegador no endereço:
+\begin{verbatim}
+http://127.0.0.1:5000
+\end{verbatim}
+
+\section{Usuários Iniciais}
+\begin{longtable}{|p{4cm}|p{6cm}|p{4cm}|}
+\hline
+\textbf{Perfil} & \textbf{E-mail} & \textbf{Senha} \\ \hline
+Administrador & admin@uema.com & admin123 \\ \hline
+Aluno & aluno@uema.com & aluno123 \\ \hline
+Aluno & aluno1@uema.com & aluno123 \\ \hline
+Aluno & aluno2@uema.com & aluno123 \\ \hline
+Aluno & aluno3@uema.com & aluno123 \\ \hline
+\end{longtable}
+
+\section{Aluno}
+\subsection{Dashboard}
+Após o login, o aluno visualiza a quantidade de reservas ativas, próximas reservas, salas disponíveis e botão para consultar horários.
+
+\subsection{Consultar Salas}
+No menu superior, acesse \textbf{Salas} para visualizar nome, localização, capacidade e status das salas. Quando uma sala possuir bloqueio ativo para o dia atual, ela será exibida como \textbf{Bloqueada hoje} e não aparecerá no filtro de salas disponíveis.
+
+\subsection{Consultar Horários}
+No menu superior, acesse \textbf{Horários}. Selecione sala e data. O sistema apresenta horários disponíveis, ocupados e bloqueados em blocos de uma hora.
+
+\subsection{Criar Reserva}
+Na tela de horários, informe a finalidade da reserva e clique no botão do horário desejado. O sistema valida conflitos, data passada, duração fixa de uma hora, sala inativa, sala bloqueada e limite de reservas ativas.
+
+\subsection{Minhas Reservas}
+No menu \textbf{Minhas reservas}, o aluno consulta reservas ativas e canceladas.
+
+\subsection{Cancelar Reserva}
+Para cancelar, clique em \textbf{Cancelar}, informe o motivo e confirme a ação. O motivo fica registrado.
+
+\section{Administrador}
+\subsection{Painel Administrativo}
+O painel exibe indicadores de usuários, salas, salas bloqueadas e reservas ativas.
+
+\subsection{Gerenciar Usuários}
+O administrador pode cadastrar novos alunos e administradores, além de editar usuários existentes, informando nome, e-mail, matrícula, perfil, senha e status ativo ou inativo. Na edição, senha em branco mantém a senha atual.
+
+\subsection{Gerenciar Salas}
+O administrador pode cadastrar, editar, ativar, desativar, bloquear e excluir salas. A exclusão é permitida apenas para salas sem reservas ou bloqueios registrados; caso exista histórico, a orientação é desativar a sala para impedir novas reservas sem apagar registros antigos.
+
+\subsection{Reservas Administrativas}
+O administrador pode visualizar todas as reservas, filtrar por aluno, sala, status e data, além de cancelar reservas com motivo.
+
+\subsection{Bloqueios}
+O administrador pode bloquear salas por período, informando sala, data inicial, data final e motivo. Também pode cancelar bloqueios.
+
+\subsection{Configurações}
+O administrador pode configurar o limite máximo de reservas ativas por aluno.
+
+\section{Mensagens}
+O sistema exibe mensagens de sucesso e erro em português para login, cadastros, reservas, bloqueios, cancelamentos e validações.
+
+\end{document}

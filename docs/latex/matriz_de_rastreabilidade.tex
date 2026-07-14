@@ -1,0 +1,42 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\geometry{a4paper, margin=2cm}
+\title{\textbf{Matriz de Rastreabilidade}\\Sistema Reserva de Salas de Estudo}
+\author{Ailton Baren Pereira da Silva}
+\date{Junho de 2026}
+\begin{document}
+\maketitle
+
+\section{Objetivo}
+Relacionar requisitos, regras de negócio, telas ou rotas e testes automatizados, demonstrando cobertura e rastreabilidade.
+
+\section{Matriz}
+\small
+\begin{longtable}{|p{2cm}|p{2.5cm}|p{3cm}|p{7cm}|}
+\hline
+\textbf{Req.} & \textbf{Regra} & \textbf{Rota} & \textbf{Teste} \\ \hline
+RF-01 & RN-09, RN-10 & /login & test\_login\_valido; test\_login\_invalido \\ \hline
+RF-03 & RN-09 & /dashboard & test\_templates\_principais\_do\_aluno\_renderizam \\ \hline
+RF-04 & RN-09 & /salas/ & test\_filtro\_de\_salas\_por\_capacidade \\ \hline
+RF-05 & RN-06 & /salas/horarios & test\_horarios\_disponiveis\_renderiza \\ \hline
+RF-06 & RN-01 a RN-04, RN-06, RN-07, RN-12, RN-13 & /salas/horarios & testes de criação e rejeição de reserva \\ \hline
+RF-08 & RN-05, RN-11 & /reservas/\{id\}/cancelar & test\_cancelamento\_de\_reserva \\ \hline
+RF-09 & RN-08, RN-10, RN-14 & /admin/usuarios/novo & test\_admin\_cadastra\_usuario\_aluno \\ \hline
+RF-10 & RN-08, RN-10, RN-14, RN-15 & /admin/usuarios/\{id\}/editar & test\_admin\_edita\_usuario\_sem\_alterar\_senha \\ \hline
+RF-12 & RN-08 & /admin/salas/nova & test\_admin\_cadastra\_sala\_valida \\ \hline
+RF-13 & RN-08 & /admin/salas/\{id\}/editar & test\_admin\_edita\_e\_bloqueia\_sala \\ \hline
+RF-16 & RN-08 & /admin/reservas & test\_admin\_filtra\_reservas \\ \hline
+RF-18 & RN-08, RN-13 & /admin/bloqueios & test\_admin\_cria\_bloqueio\_por\_periodo \\ \hline
+RF-19 & RN-08 & /admin/bloqueios/\{id\}/cancelar & test\_admin\_cancela\_bloqueio \\ \hline
+RF-20 & RN-08, RN-12 & /admin/configuracoes & test\_admin\_atualiza\_limite\_de\_reservas \\ \hline
+RF-21 & RN-08, RN-09 & /admin/ & test\_bloqueio\_acesso\_administrativo\_para\_aluno \\ \hline
+\end{longtable}
+\normalsize
+
+\section{Cobertura}
+Os principais requisitos funcionais possuem cobertura por testes automatizados. Aspectos visuais e responsividade devem ser conferidos por inspeção manual durante a homologação.
+
+\end{document}

@@ -1,0 +1,136 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{hyperref}
+
+\geometry{a4paper, margin=2.5cm}
+
+\title{\textbf{Solicitação de Projeto}\\Sistema Reserva de Salas de Estudo}
+\author{Ailton Baren Pereira da Silva}
+\date{Junho de 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Identificação do Projeto}
+
+\begin{longtable}{|p{5cm}|p{10cm}|}
+\hline
+\textbf{Nome do Projeto} & Reserva de Salas de Estudo \\ \hline
+\textbf{Tipo de Sistema} & Sistema web acadêmico para gerenciamento de reservas de salas de estudo \\ \hline
+\textbf{Instituição} & Universidade Estadual do Maranhão \\ \hline
+\textbf{Disciplina} & Análise e Projeto de Sistemas \\ \hline
+\textbf{Responsável técnico} & Ailton Baren Pereira da Silva \\ \hline
+\textbf{Tecnologias previstas} & Python 3, Flask, Flask-SQLAlchemy, Flask-Login, PostgreSQL com psycopg, Jinja2, Bootstrap 5 por CDN e pytest \\ \hline
+\end{longtable}
+
+\section{Solicitação do Sistema}
+
+\begin{longtable}{|p{5cm}|p{10cm}|}
+\hline
+\textbf{Elemento} & \textbf{Descrição} \\ \hline
+
+\textbf{Responsável pelo Projeto} &
+Setor Administrativo acadêmico, representado pela coordenação responsável pela organização e controle dos espaços de estudo da instituição. Esse setor atua como ponto de contato entre os usuários finais e a equipe de desenvolvimento do sistema. \\ \hline
+
+\textbf{Necessidade Organizacional} &
+A instituição necessita de uma solução para controlar a reserva de salas de estudo, reduzir conflitos de agenda, organizar a utilização dos espaços disponíveis e permitir que alunos consultem horários livres de forma simples. Atualmente, a ausência de um controle centralizado pode gerar sobreposição de reservas, dificuldade de acompanhamento e uso ineficiente das salas. \\ \hline
+
+\textbf{Requisitos de Negócio} &
+O sistema deve permitir autenticação de usuários, gestão administrativa de usuários, consulta de salas, visualização de horários disponíveis por data, criação e cancelamento de reservas com motivo obrigatório, controle de conflitos de horário, gestão administrativa de salas, bloqueio de salas por período, configuração do limite de reservas ativas por aluno e consulta administrativa das reservas por meio de filtros. \\ \hline
+
+\textbf{Valor Agregado} &
+A solução proporciona melhor aproveitamento dos espaços acadêmicos, redução de conflitos de reserva, maior transparência para os alunos, apoio à tomada de decisão administrativa e diminuição do controle manual de agendas. O sistema também contribui para a organização institucional e para a rastreabilidade das reservas realizadas. \\ \hline
+
+\textbf{Questões Especiais ou Restrições} &
+O sistema deve ser desenvolvido como uma aplicação acadêmica funcional, com funcionamento local, sem uso de serviços externos, APIs em nuvem, Docker, Node.js ou React. Deve utilizar PostgreSQL como banco de dados da aplicação, Bootstrap 5 por CDN para a interface, autenticação por perfil de usuário e validações no backend para garantir a integridade das reservas. A conexão com o banco deve ser configurável por variável de ambiente \texttt{DATABASE\_URL}. \\ \hline
+
+\end{longtable}
+
+\section{Objetivo Geral}
+
+Desenvolver um sistema web acadêmico para gerenciar reservas de salas de estudo, permitindo que alunos consultem horários disponíveis e efetuem reservas sem conflitos, enquanto administradores gerenciam salas, bloqueios, configurações do sistema e reservas.
+
+\section{Objetivos Específicos}
+
+\begin{itemize}
+    \item Permitir login de alunos e administradores.
+    \item Permitir que administradores cadastrem, editem, ativem e desativem usuários.
+    \item Disponibilizar consulta de salas e horários livres por sala e data.
+    \item Permitir reserva de salas com duração fixa de uma hora.
+    \item Registrar a finalidade da reserva e exibi-la nas consultas de disponibilidade quando o horário estiver ocupado.
+    \item Impedir reservas em datas passadas ou com horários inválidos.
+    \item Evitar sobreposição de reservas para a mesma sala ou para o mesmo aluno.
+    \item Permitir cancelamento de reservas com confirmação e registro obrigatório do motivo.
+    \item Permitir que administradores cadastrem, editem, desativem, bloqueiem e excluam salas sem histórico.
+    \item Permitir bloqueio de salas por período de dias.
+    \item Exibir salas bloqueadas no dia atual como indisponíveis na lista de salas.
+    \item Permitir configuração do limite de reservas ativas por aluno.
+    \item Disponibilizar filtros administrativos para consulta de reservas por aluno, sala, status e data.
+    \item Criar usuários iniciais por script de seed e permitir novos cadastros pelo painel administrativo.
+    \item Utilizar PostgreSQL na execução da aplicação e testes automatizados isolados para validar as regras de negócio.
+\end{itemize}
+
+\section{Perfis de Usuário}
+
+\subsection{Aluno}
+
+O aluno pode consultar salas, verificar horários disponíveis na tela de horários, informar a finalidade da reserva, visualizar suas reservas e cancelar suas próprias reservas mediante confirmação e informação do motivo. As reservas são apresentadas e criadas em blocos de uma hora.
+
+\subsection{Administrador}
+
+O administrador pode cadastrar e editar usuários, gerenciar salas, consultar todas as reservas com filtros, cancelar reservas mediante registro de motivo, bloquear salas por período, cancelar bloqueios, configurar o limite máximo de reservas ativas por aluno e acompanhar o uso geral do sistema.
+
+\section{Escopo Inicial}
+
+O escopo inicial contempla um sistema funcional com autenticação, gestão administrativa de usuários, reserva de salas pela tela de horários, consulta de disponibilidade, painel administrativo, controle de conflitos, bloqueios por período, exclusão controlada de salas sem histórico, configuração de limite de reservas, interface responsiva com Bootstrap e testes automatizados.
+
+\section{Fora do Escopo Inicial}
+
+\begin{itemize}
+    \item Integração com sistemas acadêmicos externos.
+    \item Envio de notificações por e-mail.
+    \item Aplicativo mobile nativo.
+    \item Infraestrutura em nuvem.
+    \item Uso de banco de dados alternativo como MySQL, MariaDB ou SQLite em produção.
+    \item Migrações formais com Flask-Migrate ou Alembic.
+    \item Controle financeiro ou cobrança por uso de salas.
+    \item Cadastro público de novos usuários pela interface.
+\end{itemize}
+
+\section{Critérios Iniciais de Aceite}
+
+\begin{itemize}
+    \item O usuário deve conseguir realizar login com credenciais válidas.
+    \item Páginas protegidas não devem ser acessadas sem autenticação.
+    \item Alunos devem conseguir criar reservas válidas.
+    \item O sistema deve rejeitar reservas conflitantes.
+    \item O sistema deve rejeitar reservas em datas passadas.
+    \item O sistema deve impedir reservas com duração diferente de uma hora.
+    \item A tela de horários deve apresentar blocos fixos de uma hora.
+    \item A tela de horários deve indicar finalidade de reservas existentes e motivo de bloqueios.
+    \item Apenas administradores devem acessar funcionalidades administrativas.
+    \item O administrador deve conseguir cadastrar e editar usuários.
+    \item O administrador deve conseguir ativar e desativar usuários.
+    \item O administrador deve conseguir cadastrar e editar salas.
+    \item O administrador deve conseguir excluir salas que não possuem reservas ou bloqueios registrados.
+    \item O administrador deve conseguir bloquear salas por período.
+    \item A lista de salas deve indicar quando uma sala está bloqueada no dia atual.
+    \item O administrador deve conseguir configurar o limite de reservas ativas por aluno.
+    \item Os usuários iniciais devem ser cadastrados pelo script de dados iniciais.
+    \item Novos usuários criados pelo administrador devem conseguir acessar o sistema com senha armazenada em hash.
+    \item O cancelamento de reserva deve exigir e registrar motivo.
+    \item A aplicação deve estar configurada para PostgreSQL por meio de \texttt{DATABASE\_URL}.
+    \item Os testes automatizados devem ser executados com sucesso.
+\end{itemize}
+
+\section{Considerações Finais}
+
+A solicitação deste projeto justifica-se pela necessidade de organizar o uso de salas de estudo e reduzir conflitos de agenda. O sistema proposto atende a uma demanda acadêmica real, possui escopo adequado para a disciplina e permite demonstrar conceitos de análise, projeto, implementação, testes, qualidade e gerenciamento de riscos.
+
+\end{document}

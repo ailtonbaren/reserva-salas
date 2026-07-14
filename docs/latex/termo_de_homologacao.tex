@@ -1,0 +1,66 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\geometry{a4paper, margin=2.5cm}
+\title{\textbf{Termo de Homologação}\\Sistema Reserva de Salas de Estudo}
+\author{Ailton Baren Pereira da Silva}
+\date{Junho de 2026}
+\begin{document}
+\maketitle
+
+\section{Identificação}
+\begin{longtable}{|p{5cm}|p{10cm}|}
+\hline
+\textbf{Projeto} & Reserva de Salas de Estudo \\ \hline
+\textbf{Responsável técnico} & Ailton Baren Pereira da Silva \\ \hline
+\textbf{Disciplina} & Análise e Projeto de Sistemas \\ \hline
+\textbf{Instituição} & Universidade Estadual do Maranhão \\ \hline
+\end{longtable}
+
+\section{Objetivo}
+Registrar a validação do sistema acadêmico, confirmando que as funcionalidades principais foram implementadas, testadas e documentadas.
+
+\section{Itens Homologados}
+\begin{longtable}{|p{10cm}|p{4cm}|}
+\hline
+\textbf{Item} & \textbf{Situação} \\ \hline
+Login de aluno e administrador & Homologado \\ \hline
+Proteção de páginas autenticadas & Homologado \\ \hline
+Bloqueio de acesso administrativo para aluno & Homologado \\ \hline
+Gestão administrativa de usuários & Homologado \\ \hline
+Consulta de salas e horários & Homologado \\ \hline
+Indicação de salas bloqueadas no dia atual & Homologado \\ \hline
+Criação e cancelamento de reservas & Homologado \\ \hline
+Validação de conflitos de reserva & Homologado \\ \hline
+Gestão administrativa de salas & Homologado \\ \hline
+Exclusão controlada de salas sem histórico & Homologado \\ \hline
+Bloqueio de salas por período & Homologado \\ \hline
+Configuração do limite de reservas ativas & Homologado \\ \hline
+PostgreSQL como banco da aplicação & Homologado \\ \hline
+Testes automatizados com pytest & Homologado \\ \hline
+Documentação de instalação e execução & Homologado \\ \hline
+\end{longtable}
+
+\section{Resultado dos Testes}
+\begin{verbatim}
+36 passed
+\end{verbatim}
+
+\section{Pendências Fora do Escopo}
+Envio de e-mail, integração institucional, aplicativo mobile, hospedagem em nuvem, cadastro público de usuários e migrações formais com Alembic.
+
+\section{Conclusão}
+O sistema atende ao escopo acadêmico definido, contemplando autenticação, perfis de acesso, gestão administrativa, reserva de salas, validações de regras de negócio, testes automatizados e documentação de apoio.
+
+\section{Assinaturas}
+\vspace{1.5cm}
+\begin{center}
+\begin{tabular}{p{7cm}p{7cm}}
+\hrulefill & \hrulefill \\
+Responsável técnico & Professor orientador \\
+\end{tabular}
+\end{center}
+
+\end{document}

@@ -1,0 +1,90 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\geometry{a4paper, margin=2.5cm}
+\title{\textbf{Documento de Requisitos}\\Sistema Reserva de Salas de Estudo}
+\author{Ailton Baren Pereira da Silva}
+\date{Junho de 2026}
+\begin{document}
+\maketitle
+
+\section{Objetivo}
+Registrar requisitos funcionais, requisitos não funcionais e regras de negócio do sistema Reserva de Salas de Estudo.
+
+\section{Perfis}
+\subsection{Aluno}
+Consulta salas e horários, cria reservas, visualiza suas reservas e cancela suas próprias reservas.
+
+\subsection{Administrador}
+Gerencia usuários, salas, bloqueios, reservas e configurações do sistema.
+
+\section{Requisitos Funcionais}
+\begin{longtable}{|p{2cm}|p{12cm}|}
+\hline
+\textbf{ID} & \textbf{Requisito} \\ \hline
+RF-01 & Permitir login de usuários cadastrados. \\ \hline
+RF-02 & Permitir logout. \\ \hline
+RF-03 & Exibir dashboard conforme o perfil. \\ \hline
+RF-04 & Permitir consulta de salas. \\ \hline
+RF-05 & Permitir consulta de horários por sala, data e duração. \\ \hline
+RF-06 & Permitir criação de reservas com finalidade. \\ \hline
+RF-07 & Permitir visualização das próprias reservas. \\ \hline
+RF-08 & Permitir cancelamento de reserva com motivo. \\ \hline
+RF-09 & Permitir cadastro de usuários pelo administrador. \\ \hline
+RF-10 & Permitir edição de usuários pelo administrador. \\ \hline
+RF-11 & Permitir ativar e desativar usuários. \\ \hline
+RF-12 & Permitir cadastro de salas. \\ \hline
+RF-13 & Permitir edição de salas. \\ \hline
+RF-14 & Permitir ativar, desativar e bloquear salas. \\ \hline
+RF-15 & Permitir visualização administrativa de reservas. \\ \hline
+RF-16 & Permitir filtro administrativo de reservas. \\ \hline
+RF-17 & Permitir cancelamento administrativo de reservas. \\ \hline
+RF-18 & Permitir bloqueio de salas por período. \\ \hline
+RF-19 & Permitir cancelamento de bloqueios. \\ \hline
+RF-20 & Permitir configuração do limite de reservas ativas por aluno. \\ \hline
+RF-21 & Exibir páginas 403 e 404. \\ \hline
+\end{longtable}
+
+\section{Requisitos Não Funcionais}
+\begin{longtable}{|p{2cm}|p{12cm}|}
+\hline
+\textbf{ID} & \textbf{Requisito} \\ \hline
+RNF-01 & Utilizar Python 3 e Flask. \\ \hline
+RNF-02 & Utilizar PostgreSQL como banco da aplicação. \\ \hline
+RNF-03 & Utilizar Flask-SQLAlchemy para persistência. \\ \hline
+RNF-04 & Utilizar Flask-Login para autenticação. \\ \hline
+RNF-05 & Utilizar Jinja2 para templates. \\ \hline
+RNF-06 & Utilizar Bootstrap 5 por CDN. \\ \hline
+RNF-07 & Ter layout responsivo. \\ \hline
+RNF-08 & Possuir testes automatizados com pytest. \\ \hline
+RNF-09 & Armazenar senhas com hash seguro. \\ \hline
+RNF-10 & Executar localmente sem Docker, React, Node.js, APIs externas ou nuvem. \\ \hline
+\end{longtable}
+
+\section{Regras de Negócio}
+\begin{longtable}{|p{2cm}|p{12cm}|}
+\hline
+\textbf{ID} & \textbf{Regra} \\ \hline
+RN-01 & A hora final deve ser posterior à hora inicial. \\ \hline
+RN-02 & Não aceitar reservas em datas passadas. \\ \hline
+RN-03 & A reserva deve ter duração fixa de uma hora. \\ \hline
+RN-04 & Uma sala não pode possuir reservas ativas sobrepostas na mesma data. \\ \hline
+RN-05 & Somente proprietário ou administrador pode cancelar reserva. \\ \hline
+RN-06 & Salas inativas ou bloqueadas não podem ser reservadas. \\ \hline
+RN-07 & Um aluno não pode criar reservas sobrepostas. \\ \hline
+RN-08 & Somente administradores gerenciam usuários, salas, bloqueios e configurações. \\ \hline
+RN-09 & Páginas protegidas exigem autenticação. \\ \hline
+RN-10 & Senhas devem ser armazenadas com hash seguro. \\ \hline
+RN-11 & Cancelamento de reserva deve registrar motivo. \\ \hline
+RN-12 & O administrador pode configurar o limite de reservas ativas. \\ \hline
+RN-13 & Bloqueios por período impedem reservas no intervalo. \\ \hline
+RN-14 & E-mails de usuários devem ser únicos. \\ \hline
+RN-15 & O administrador não pode desativar seu próprio usuário. \\ \hline
+\end{longtable}
+
+\section{Dados Iniciais}
+O sistema cria administrador, alunos, salas de estudo e configuração inicial de limite de reservas por meio do script de seed.
+
+\end{document}
